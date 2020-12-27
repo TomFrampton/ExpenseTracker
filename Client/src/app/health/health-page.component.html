@@ -1,0 +1,11 @@
+<h2>Health Page</h2>
+
+<section *ngIf="(systemHealth$ | async) as systemHealth; else loading">
+    <h4>API</h4>
+    <span>{{ getItemHealthMessage(systemHealth.api) }}</span>
+
+</section>
+
+<ng-template #loading>
+    <span>Loading...</span>
+</ng-template>
