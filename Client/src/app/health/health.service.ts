@@ -12,7 +12,7 @@ export class HealthService {
     constructor(private httpClient: HttpClient) {}
 
     getSystemHealth(): Observable<SystemHealth> {
-        return this.httpClient.get<SystemHealth>('https://localhost:44358/api/system/health');
+        return this.httpClient.get<SystemHealth>('./system/health');
     }
 
 }

@@ -1,0 +1,5 @@
+<h2>Transactions</h2>
+
+<span *ngIf="loading">Loading...</span>
+
+<aug-transactions-table *ngIf="(transactions$ | async) as transactions" [transactions]="transactions"></aug-transactions-table>
