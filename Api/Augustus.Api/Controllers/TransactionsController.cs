@@ -11,16 +11,29 @@ namespace Augustus.Api.Controllers
     [Route("api/transactions")]
     public class TransactionsController : ControllerBase
     {
+        private static readonly List<Transaction> _transactions = new List<Transaction>
+        {
+            new Transaction { Id = 1, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
+            new Transaction { Id = 2, Date = DateTime.Now, Description = "Asda", Amount = 3.29M }
+        };
+
         [HttpGet]
         public IActionResult GetAll()
         {
-            var transactions = new List<Transaction>
-            {
-                new Transaction { Id = 1, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
-                new Transaction { Id = 2, Date = DateTime.Now, Description = "Asda", Amount = 3.29M }
-            };
+            return Ok(_transactions);
+        }
 
-            return Ok(transactions);
+        [HttpGet("{id:int}")]
+        public IActionResult GetById(int id)
+        {
+            var transaction = _transactions.FirstOrDefault(x => x.Id == id);
+
+            if (transaction == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(transaction);
         }
     }
 }

@@ -29,6 +29,7 @@ export class TransactionsPageComponent implements OnInit {
 
     private mapTransactions(transations: Transaction[]): TransactionTableRow[] {
         return transations.map(t => ({
+            id: t.id,
             description: t.description,
             date: t.date,
             amount: t.amount

@@ -11,4 +11,8 @@ export class TransactionService {
     getAll(): Observable<Transaction[]> {
         return this.httpClient.get<Transaction[]>('./transactions');
     }
+
+    getById(transactionId: number): Observable<Transaction> {
+        return this.httpClient.get<Transaction>(`./transactions/${transactionId}`);
+    }
 }

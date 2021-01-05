@@ -1,0 +1,12 @@
+
+<section *ngIf="(transaction$ | async) as transaction; else noTransaction">
+    <h4>
+        Transaction Detail
+        <a routerLink="../">X</a>
+    </h4>
+    <aug-transaction-detail-form [transaction]="transaction"></aug-transaction-detail-form>
+</section>
+
+<ng-template #noTransaction>
+    No transaction selected
+</ng-template>
