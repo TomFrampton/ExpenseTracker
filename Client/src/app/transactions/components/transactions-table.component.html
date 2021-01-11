@@ -1,12 +1,24 @@
-<table>
-    <tr>
-        <th>Description</th>
-        <th>Amount</th>
-        <th></th>
-    </tr>
-    <tr *ngFor="let transaction of transactions">
-        <td>{{ transaction.description }}</td>
-        <td>{{ transaction.amount }}</td>
-        <td><a [routerLink]="['./', transaction.id]">Edit</a></td>
-    </tr>
-</table>
+<form [formGroup]="form">
+    <table>
+        <tr>
+            <th>
+                <input type="checkbox" formControlName="allSelected" />
+            </th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th></th>
+        </tr>
+
+        <ng-container formArrayName="transactions">
+            <ng-container *ngFor="let transaction of transactions; let i = index" [formGroupName]="i">
+                <tr>
+                    <td><input type="checkbox" formControlName="selected"/></td>
+                    <td>{{ transaction.description }}</td>
+                    <td>{{ transaction.amount }}</td>
+                    <td><a [routerLink]="['./', transaction.id]">Edit</a></td>
+                </tr>
+            </ng-container>
+        </ng-container>
+
+    </table>
+</form>

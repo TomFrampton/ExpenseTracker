@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivateChild, RouterStateSnapshot, UrlTree } from '@angular/router';
 
 import { Observable, timer } from 'rxjs';
 import { tap, map, delay } from 'rxjs/operators';

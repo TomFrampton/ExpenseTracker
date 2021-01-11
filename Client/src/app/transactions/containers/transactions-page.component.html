@@ -2,6 +2,8 @@
 
 <span *ngIf="loading">Loading...</span>
 
-<aug-transactions-table *ngIf="(transactions$ | async) as transactions" [transactions]="transactions"></aug-transactions-table>
+<ng-container *ngIf="(transactions$ | async) as transactions">
+    <aug-transactions-table  [transactions]="transactions"></aug-transactions-table>
+    <router-outlet></router-outlet>
+</ng-container>
 
-<router-outlet></router-outlet>
