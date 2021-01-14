@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { AugustusCommonModule } from './common/common.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,9 @@ import { AugustusCommonModule } from './common/common.module';
 
     TransactionsModule,
 
-    AppRoutingModule
+    AppRoutingModule,
+
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
