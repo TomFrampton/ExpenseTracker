@@ -1,9 +1,35 @@
-<h2>Transactions</h2>
+<div class="content-container">
 
-<span *ngIf="loading">Loading...</span>
+    <span *ngIf="loading">Loading...</span>
 
-<ng-container *ngIf="(transactions$ | async) as transactions">
-    <aug-transactions-table  [transactions]="transactions"></aug-transactions-table>
-    <router-outlet></router-outlet>
-</ng-container>
+    <ng-container *ngIf="(transactions$ | async) as transactions">
+        <div class="golden-ratio-container">
+            <mat-card class="golden-ratio-large">
+                <mat-card-title>
+                    <h2>Transactions</h2>
+                </mat-card-title>
+
+                <mat-divider></mat-divider>
+
+                <mat-card-content>
+                    <aug-transactions-table  [transactions]="transactions"></aug-transactions-table>
+                    <router-outlet></router-outlet>
+                </mat-card-content>
+            </mat-card>
+
+            <mat-card class="golden-ratio-small">
+                <mat-card-title>
+                    <h2>Transactions</h2>
+                </mat-card-title>
+
+                <mat-divider></mat-divider>
+
+                <mat-card-content>
+                    <aug-transactions-table  [transactions]="transactions"></aug-transactions-table>
+                    <router-outlet></router-outlet>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </ng-container>
+</div>
 

@@ -1,24 +1,35 @@
 <form [formGroup]="form">
-    <table>
-        <tr>
-            <th>
-                <input type="checkbox" formControlName="allSelected" />
-            </th>
-            <th>Description</th>
-            <th>Amount</th>
-            <th></th>
-        </tr>
+    <table class="full-width" mat-table [dataSource]="transactions">
 
-        <ng-container formArrayName="transactions">
-            <ng-container *ngFor="let transaction of transactions; let i = index" [formGroupName]="i">
-                <tr>
-                    <td><input type="checkbox" formControlName="selected"/></td>
-                    <td>{{ transaction.description }}</td>
-                    <td>{{ transaction.amount }}</td>
-                    <td><a [routerLink]="['./', transaction.id]">Edit</a></td>
-                </tr>
-            </ng-container>
+        <ng-container matColumnDef="selected">
+            <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox formControlName="allSelected" [indeterminate]="showIndeterminateSelection"></mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let transaction; let i = index" formArrayName="transactions">
+                <ng-container  [formGroupName]="i">
+                    <mat-checkbox formControlName="selected"></mat-checkbox>
+                </ng-container>
+            </td>
         </ng-container>
 
+        <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>Description</th>
+            <td mat-cell *matCellDef="let transaction">{{ transaction.description }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef>Amount (£)</th>
+            <td mat-cell *matCellDef="let transaction">{{ transaction.amount }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let transaction">
+                <a mat-button [routerLink]="['./', transaction.id]">Edit</a>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let rowData; columns: columns"></tr>
     </table>
 </form>

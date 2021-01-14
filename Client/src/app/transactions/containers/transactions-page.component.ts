@@ -10,7 +10,8 @@ import { TransactionService } from '../services/transaction.service';
 
 
 @Component({
-    templateUrl: './transactions-page.component.html'
+    templateUrl: './transactions-page.component.html',
+    styleUrls: ['./transactions-page.component.scss']
 })
 export class TransactionsPageComponent implements OnInit {
     loading = true;

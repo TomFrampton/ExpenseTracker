@@ -9,6 +9,13 @@ import { TransactionDetailComponent } from './containers/transaction-detail.comp
 import { TransactionDetailFormComponent } from './components/transaction-detail-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
+// Angular Material
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 const routes: Routes = [
     { path: 'transactions', component: TransactionsPageComponent, children: [
         { path: ':id', component: TransactionDetailComponent }
@@ -19,7 +26,13 @@ const routes: Routes = [
     imports: [
         RouterModule.forChild(routes),
         CommonModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+
+        MatCardModule,
+        MatDividerModule,
+        MatTableModule,
+        MatButtonModule,
+        MatCheckboxModule
     ],
 
     declarations: [

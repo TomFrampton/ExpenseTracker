@@ -30,3 +30,23 @@ $augustus-theme: mat-light-theme($augustus-primary, $augustus-accent, $augustus-
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.flex { display: flex; }
+
+.space-between { justify-content: space-between; }
+
+.full-width { width: 100%; }
+
+.golden-ratio-container {
+    display: flex;
+    flex-direction: row;
+
+    .golden-ratio-large {
+        width: 61.8%
+    }
+
+    .golden-ratio-small {
+        width: 38.2%;
+    }
+}

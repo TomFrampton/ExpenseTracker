@@ -14,10 +14,13 @@ export interface TransactionTableRow {
 
 @Component({
     selector: 'aug-transactions-table',
-    templateUrl: './transactions-table.component.html'
+    templateUrl: './transactions-table.component.html',
+    styleUrls: ['./transactions-table.component.scss']
 })
 export class TransactionsTableComponent implements OnChanges, OnDestroy {
     private destroy$ = new Subject();
+
+    columns = ['selected', 'description', 'amount', 'actions'];
 
     form: FormGroup;
 
@@ -29,6 +32,16 @@ export class TransactionsTableComponent implements OnChanges, OnDestroy {
 
     get selectedControls(): FormControl[] {
         return this.transactionsControl && this.transactionsControl.controls.map((x: FormGroup) => x.controls.selected as FormControl);
+    }
+
+    /**
+     * Whether or not to display the indeterminate selection on the 'select all' checkbox.
+     */
+    get showIndeterminateSelection(): boolean {
+        const allSelectedControl = this.form && this.form.controls.allSelected as FormControl;
+        const allSelected = allSelectedControl && allSelectedControl.value || false;
+
+        return !allSelected && this.selectedControls.some(x => x.value);
     }
 
     constructor(private formBuilder: FormBuilder) {}
