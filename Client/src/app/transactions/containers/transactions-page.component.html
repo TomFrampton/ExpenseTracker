@@ -2,34 +2,47 @@
 
     <span *ngIf="loading">Loading...</span>
 
-    <ng-container *ngIf="(transactions$ | async) as transactions">
+    <ng-container *ngIf="(transactionRows$ | async) as transactions">
         <div class="golden-ratio-container">
-            <mat-card class="golden-ratio-large">
-                <mat-card-title>
-                    <h2>Transactions</h2>
-                </mat-card-title>
+            <div class="golden-ratio-large">
+                <mat-card>
+                    <mat-card-title>
+                        <h2>Transactions</h2>
+                    </mat-card-title>
 
-                <mat-divider></mat-divider>
+                    <mat-divider></mat-divider>
 
-                <mat-card-content>
-                    <aug-transactions-table  [transactions]="transactions"></aug-transactions-table>
-                    <router-outlet></router-outlet>
-                </mat-card-content>
-            </mat-card>
+                    <mat-card-content>
+                        <aug-transactions-table
+                            [transactions]="transactions"
+                            (transactionSelectionChange)="onTransactionSelectionChange($event)">
+                        </aug-transactions-table>
+                    </mat-card-content>
+                </mat-card>
+            </div>
 
-            <mat-card class="golden-ratio-small">
-                <mat-card-title>
-                    <h2>Transactions</h2>
-                </mat-card-title>
+            <div class="golden-ratio-small">
+                <mat-card>
+                    <mat-card-title>
+                        <h2>Transactions</h2>
+                    </mat-card-title>
 
-                <mat-divider></mat-divider>
+                    <mat-divider></mat-divider>
 
-                <mat-card-content>
-                    <aug-transactions-table  [transactions]="transactions"></aug-transactions-table>
-                    <router-outlet></router-outlet>
-                </mat-card-content>
-            </mat-card>
+                    <mat-card-content>
+                        <aug-transactions-categorisation-form
+                            *ngIf="selectedTransactions.length; else noTransactionsSelected"
+                            [transactions]="selectedTransactions"
+                            [categories]="[]">
+                        </aug-transactions-categorisation-form>
+                    </mat-card-content>
+                </mat-card>
+            </div>
         </div>
     </ng-container>
 </div>
+
+<ng-template #noTransactionsSelected>
+    <p class="aug-mat-card-placeholder">Select transactions to categorise</p>
+</ng-template>
 

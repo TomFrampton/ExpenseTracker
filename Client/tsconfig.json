@@ -14,7 +14,11 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+        "@aug/common/*": ["src/app/common/*"],
+        "@aug/transactions/*": ["src/app/transactions/*"]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

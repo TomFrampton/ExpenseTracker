@@ -50,3 +50,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
         width: 38.2%;
     }
 }
+
+.aug-mat-card-placeholder {
+    height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+mat-card-content {
+    min-height: 180px;
+}

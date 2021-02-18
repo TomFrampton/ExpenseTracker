@@ -14,7 +14,13 @@ namespace Augustus.Api.Controllers
         private static readonly List<Transaction> _transactions = new List<Transaction>
         {
             new Transaction { Id = 1, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
-            new Transaction { Id = 2, Date = DateTime.Now, Description = "Asda", Amount = 3.29M }
+            new Transaction { Id = 2, Date = DateTime.Now, Description = "Asda", Amount = 3.29M },
+            new Transaction { Id = 3, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
+            new Transaction { Id = 4, Date = DateTime.Now, Description = "Asda", Amount = 3.29M },
+            new Transaction { Id = 5, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
+            new Transaction { Id = 6, Date = DateTime.Now, Description = "Asda", Amount = 3.29M },
+            new Transaction { Id = 7, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
+            new Transaction { Id = 8, Date = DateTime.Now, Description = "Asda", Amount = 3.29M }
         };
 
         [HttpGet]

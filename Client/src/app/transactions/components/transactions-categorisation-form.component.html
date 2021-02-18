@@ -1,0 +1,7 @@
+<form [formGroup]="form" (ngOnSubmit)="onSubmit()">
+
+    <button mat-raised-button color="primary">
+        Categorise {{transactions.length}} transaction<ng-container *ngIf="transactions.length > 1">s</ng-container>
+    </button>
+
+</form>

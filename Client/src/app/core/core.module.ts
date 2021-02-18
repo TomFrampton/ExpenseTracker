@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { BaseUrlHttpInterceptor } from './http/base-url-http-interceptor';
+import { BaseUrlHttpInterceptor } from './interceptors/base-url-http-interceptor';
 import { BrowserModule } from '@angular/platform-browser';
 
 

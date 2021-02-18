@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateChild, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Id } from '@aug/common/id';
 
 import { Observable, timer } from 'rxjs';
 import { tap, map, delay } from 'rxjs/operators';
@@ -16,17 +17,25 @@ import { TransactionService } from '../services/transaction.service';
 export class TransactionsPageComponent implements OnInit {
     loading = true;
 
-    transactions$: Observable<TransactionTableRow[]>;
+    transactions: Transaction[];
+    transactionRows$: Observable<TransactionTableRow[]>;
+
+    selectedTransactions: Transaction[] = [];
 
     constructor(private transactionService: TransactionService) {}
 
     ngOnInit() {
-        this.transactions$ = this.transactionService.getAll().pipe(
+        this.transactionRows$ = this.transactionService.getAll().pipe(
             delay(3000),
             tap(() => this.loading = false),
             tap(trans => console.log(trans)),
+            tap(trans => this.transactions = trans),
             map(trans => this.mapTransactions(trans))
         );
+    }
+
+    onTransactionSelectionChange(ids: Id<Transaction>[]) {
+        this.selectedTransactions = ids.map(id => this.transactions.find(x => x.id === id));
     }
 
     private mapTransactions(transations: Transaction[]): TransactionTableRow[] {
