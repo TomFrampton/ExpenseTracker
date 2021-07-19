@@ -1,4 +1,25 @@
-<form [formGroup]="form" (ngOnSubmit)="onSubmit()">
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <mat-form-field appearance="standard">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="category">
+            <mat-option *ngFor="let category of categories" [value]="category.id">
+            {{ category.name }}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls.category.hasError('required')">
+            Email is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="subCategories.length" appearance="standard">
+        <mat-label>Sub-Category</mat-label>
+        <mat-select formControlName="subCategory">
+            <mat-option *ngFor="let category of subCategories" [value]="category.id">
+            {{ category.name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
 
     <button mat-raised-button color="primary">
         Categorise {{transactions.length}} transaction<ng-container *ngIf="transactions.length > 1">s</ng-container>

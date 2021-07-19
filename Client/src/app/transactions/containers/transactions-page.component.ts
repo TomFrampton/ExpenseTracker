@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivateChild, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Id } from '@aug/common/id';
 
-import { Observable, timer } from 'rxjs';
-import { tap, map, delay } from 'rxjs/operators';
-import { TransactionTableRow } from '../components/transactions-table.component';
+import { merge, Observable, Subject } from 'rxjs';
+import { tap, map, delay, switchMap } from 'rxjs/operators';
 
+import { TransactionTableRow } from '../components/transactions-table.component';
+import { TransactionCategorisation } from '../models/transaction-categorisation.model';
+import { TransactionCategory } from '../models/transaction-category.model';
 import { Transaction } from '../models/transaction.model';
 import { TransactionService } from '../services/transaction.service';
 
@@ -19,18 +20,34 @@ export class TransactionsPageComponent implements OnInit {
 
     transactions: Transaction[];
     transactionRows$: Observable<TransactionTableRow[]>;
+    transactionCategories$: Observable<TransactionCategory[]>;
+
+    refreshTransactions$ = new Subject<void>();
 
     selectedTransactions: Transaction[] = [];
+
+    get selectedTransactionIds(): number[] {
+        return this.selectedTransactions?.map(x => x.id) || [];
+    }
 
     constructor(private transactionService: TransactionService) {}
 
     ngOnInit() {
-        this.transactionRows$ = this.transactionService.getAll().pipe(
+        const getTransactions = () => this.transactionService.getAll();
+
+        this.transactionRows$ = merge(
+            getTransactions(),
+            this.refreshTransactions$.pipe(switchMap(() => getTransactions()))
+        ).pipe(
             delay(3000),
             tap(() => this.loading = false),
             tap(trans => console.log(trans)),
             tap(trans => this.transactions = trans),
             map(trans => this.mapTransactions(trans))
+        );
+
+        this.transactionCategories$ = this.transactionService.getCategories().pipe(
+            delay(1000)
         );
     }
 
@@ -38,12 +55,25 @@ export class TransactionsPageComponent implements OnInit {
         this.selectedTransactions = ids.map(id => this.transactions.find(x => x.id === id));
     }
 
+    onCategorise(categorisation: TransactionCategorisation) {
+        const request = {
+            ...categorisation,
+            transactionIds: this.selectedTransactionIds
+        };
+
+        this.transactionService.categorise(request).subscribe(result => {
+            this.loading = true;
+            this.refreshTransactions$.next();
+        });
+    }
+
     private mapTransactions(transations: Transaction[]): TransactionTableRow[] {
         return transations.map(t => ({
             id: t.id,
             description: t.description,
             date: t.date,
-            amount: t.amount
+            amount: t.amount,
+            category: t.category ? (t.subCategory ? `${t.category} - ${t.subCategory}` : t.category) : '-'
         }))
     }
 }

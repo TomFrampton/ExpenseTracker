@@ -1,4 +1,5 @@
-﻿using Augustus.Api.Models.Transactions;
+﻿using Augustus.Api.Models;
+using Augustus.Api.Models.Transactions;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,19 @@ namespace Augustus.Api.Controllers
             new Transaction { Id = 8, Date = DateTime.Now, Description = "Asda", Amount = 3.29M }
         };
 
+        private static readonly List<TransactionCategory> _transactionCategories = new List<TransactionCategory>
+        {
+            new TransactionCategory { Id = 1, Name = "Groceries" },
+            new TransactionCategory { Id = 2, Name = "Amazon" },
+            new TransactionCategory { Id = 3, Name = "Eat Out", SubCategories = new List<TransactionCategory>
+                {
+                    new TransactionCategory { Id = 301, Name = "Restaurant" },
+                    new TransactionCategory { Id = 302, Name = "Pub" },
+                    new TransactionCategory { Id = 303, Name = "Fast-Food" },
+                }
+            }
+        };
+
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -40,6 +54,31 @@ namespace Augustus.Api.Controllers
             }
 
             return Ok(transaction);
+        }
+
+        [HttpGet("categories")]
+        public IActionResult GetCategories()
+        {
+            return Ok(_transactionCategories);
+        }
+
+
+        [HttpPost("categorise")]
+        public IActionResult Categorise([FromBody] TransactionCategorisationRequest model)
+        {
+            // To refactor
+            var category = _transactionCategories.Single(x => x.Id == model.CategoryId);
+            var subCategory = model.SubCategoryId != null ? category.SubCategories.Single(x => x.Id == model.SubCategoryId) : null;
+
+            foreach (var id in model.TransactionIds)
+            {
+                var transaction = _transactions.Single(x => x.Id == id);
+
+                transaction.Category = category.Name;
+                transaction.SubCategory = subCategory?.Name;
+
+            }
+            return Ok();
         }
     }
 }

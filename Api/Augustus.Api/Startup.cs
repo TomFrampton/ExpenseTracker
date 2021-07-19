@@ -32,7 +32,8 @@ namespace Augustus.Api
                 options.AddPolicy(DevelopmentCorsPolicy, builder =>
                 {
                     builder
-                        .WithOrigins("http://localhost:4200");
+                        .WithOrigins("http://localhost:4200")
+                        .WithHeaders("Content-Type");
                 });
             });
 

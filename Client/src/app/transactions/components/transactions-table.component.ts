@@ -12,6 +12,7 @@ export interface TransactionTableRow {
     description: string;
     amount: number;
     date: Date;
+    category: string;
 }
 
 @Component({
@@ -22,7 +23,7 @@ export interface TransactionTableRow {
 export class TransactionsTableComponent implements OnChanges, OnDestroy {
     private destroy$ = new Subject();
 
-    columns = ['selected', 'description', 'amount', 'actions'];
+    columns = ['selected', 'description', 'amount', 'category', 'actions'];
 
     form: FormGroup;
 
@@ -76,13 +77,17 @@ export class TransactionsTableComponent implements OnChanges, OnDestroy {
         });
 
         // Set 'select all' based on individual rows being selected
-        combineLatest(this.selectionControls.map(x => x.valueChanges.pipe(startWith(x.value)))).subscribe(() => {
+        combineLatest(this.selectionControls.map(x => x.valueChanges.pipe(startWith(x.value)))).pipe(
+            takeUntil(this.destroy$)
+        ).subscribe(() => {
             this.calculateAllSelected();
             this.emitUpdatedTransactionSelection();
         });
 
         // Set individual rows based on 'select all' being selected
-        this.form.controls.allSelected.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(selectAll => {
+        this.form.controls.allSelected.valueChanges.pipe(
+            takeUntil(this.destroy$)
+        ).subscribe(selectAll => {
             this.selectionControls.forEach(x => x.setValue(selectAll, { emitEvent: false }));
             this.emitUpdatedTransactionSelection();
         });
@@ -96,8 +101,8 @@ export class TransactionsTableComponent implements OnChanges, OnDestroy {
 
     private emitUpdatedTransactionSelection() {
         const selectedIds = this.transactionsControl.getRawValue()
-        .filter(x => x.selected)
-        .map(x => x.id);
+            .filter(x => x.selected)
+            .map(x => x.id);
 
         this.transactionSelectionChange.emit(selectedIds);
     }

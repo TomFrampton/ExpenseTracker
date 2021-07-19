@@ -1,21 +1,34 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Category } from '../models/category.model';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 import { Transaction } from '../models/transaction.model';
+import { TransactionCategory } from '../models/transaction-category.model';
+import { TransactionCategorisation } from '../models/transaction-categorisation.model';
 
 
 @Component({
     selector: 'aug-transactions-categorisation-form',
-    templateUrl: './transactions-categorisation-form.component.html'
+    templateUrl: './transactions-categorisation-form.component.html',
+    styleUrls: ['./transactions-categorisation-form.component.scss']
 })
-export class TransactionsCategorisationFormComponent implements OnInit, OnChanges {
+export class TransactionsCategorisationFormComponent implements OnInit, OnChanges, OnDestroy {
+    private readonly destroy$ = new Subject<void>();
+
     @Input() transactions: Transaction[];
-    @Input() categories: Category[];
+    @Input() categories: TransactionCategory[];
+
+    @Output() categorise = new EventEmitter<TransactionCategorisation>();
+
+    subCategories: TransactionCategory[] = [];
 
     form: FormGroup;
 
-    constructor(private formBuilder: FormBuilder) {}
+    constructor(private formBuilder: FormBuilder) {
+        window['sut'] = this;
+    }
 
     ngOnInit(): void {
         this.buildForm();
@@ -25,13 +38,32 @@ export class TransactionsCategorisationFormComponent implements OnInit, OnChange
         //throw new Error('Method not implemented.');
     }
 
-    onSubmit() {
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 
+    onSubmit() {
+        if (this.form.valid) {
+            this.categorise.emit({
+                categoryId: this.form.value.category,
+                subCategoryId: this.form.value.subCategory
+            });
+        }
     }
 
     private buildForm() {
         this.form = this.formBuilder.group({
-            category: [null]
+            category: [null, Validators.required],
+            subCategory: [null]
+        });
+
+        this.form.controls.category.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(categoryId => {
+            this.subCategories = categoryId && this.categories.find(x => x.id === categoryId)?.subCategories || [];
+
+            if (this.subCategories.length === 0) {
+                this.form.controls.subCategory.setValue(null);
+            }
         });
     }
 }

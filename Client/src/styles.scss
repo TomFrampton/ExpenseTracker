@@ -33,6 +33,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
 .flex { display: flex; }
+.flex-column { flex-direction: column; }
 
 .space-between { justify-content: space-between; }
 

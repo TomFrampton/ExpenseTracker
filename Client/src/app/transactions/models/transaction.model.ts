@@ -3,4 +3,8 @@ export interface Transaction {
     date: Date;
     description: string;
     amount: number;
+
+    // To refactor
+    category: string;
+    subCategory: string;
 }
