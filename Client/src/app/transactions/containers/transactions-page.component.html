@@ -1,7 +1,6 @@
+<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
 <div class="content-container">
-
-    <span *ngIf="loading">Loading...</span>
-
     <ng-container *ngIf="(transactionRows$ | async) as transactions">
         <div class="golden-ratio-container">
             <div class="golden-ratio-large">
