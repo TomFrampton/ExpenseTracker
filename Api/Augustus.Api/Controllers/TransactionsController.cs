@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Augustus.Api.Controllers
 {
     [ApiController]
-    [Route("api/transactions")]
+    [Route("[controller]")]
     public class TransactionsController : ControllerBase
     {
         private static readonly List<Transaction> _transactions = new List<Transaction>

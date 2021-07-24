@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Augustus.Api.Controllers
 {
     [ApiController]
-    [Route("api/system")]
+    [Route("[controller]")]
     public class SystemController : ControllerBase
     {
         [HttpGet("health")]
