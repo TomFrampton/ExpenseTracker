@@ -6,12 +6,54 @@
 trigger:
 - master
 
-pool:
-  vmImage: windows-2019
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    pool:
+      vmImage: windows-2019
 
-variables:
-  buildConfiguration: 'Release'
+    variables:
+      buildConfiguration: 'Release'
+      projectFilepath: 'Api/Augustus.Api/Augustus.Api.csproj'
 
-steps:
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'Build with dotnet'
+      inputs:
+        command: 'build'
+        projects: '$(projectFilepath)'
+        configuration: '$(buildConfiguration)'
+        arguments: '--output $(Build.ArtifactStagingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish build artifacts'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    pool:
+      vmImage: windows-2019
+
+    steps:
+    - task: DownloadBuildArtifacts@1
+      displayName: 'Download build artifacts'
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        artifactName: 'drop'
+
+    - task: AzureRmWebAppDeployment@4
+      displayName: 'Deploy to Azure'
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'leconfield-software(af4597b8-06f3-421c-b812-b8bf6057a731)'
+        appType: 'webApp'
+        WebAppName: 'augustus-api'
+        VirtualApplication: '/api'
+        packageForLinux: '$(System.ArtifactsDirectory)/drop'
