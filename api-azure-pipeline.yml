@@ -4,7 +4,12 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- master
+  branches:
+    include:
+      - master
+  paths:
+    include:
+    - 'Api'
 
 stages:
 - stage: Build
@@ -57,3 +62,7 @@ stages:
         WebAppName: 'augustus-api'
         VirtualApplication: '/api'
         packageForLinux: '$(System.ArtifactsDirectory)/drop'
+        enableCustomDeployment: true
+        DeploymentType: 'webDeploy'
+        RemoveAdditionalFilesFlag: true
+        
