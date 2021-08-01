@@ -44,20 +44,10 @@ namespace Augustus.Api.Controllers
 
 
         [HttpPost("categorise")]
-        public IActionResult Categorise([FromBody] TransactionCategorisationRequest model)
+        public async Task<IActionResult> Categorise([FromBody] TransactionCategorisationRequest model)
         {
-            // To refactor
-            //var category = _transactionCategories.Single(x => x.Id == model.CategoryId);
-            //var subCategory = model.SubCategoryId != null ? category.SubCategories.Single(x => x.Id == model.SubCategoryId) : null;
+            await _transactionsService.CategoriseTransactions(model);
 
-            //foreach (var id in model.TransactionIds)
-            //{
-            //    var transaction = _transactions.Single(x => x.Id == id);
-
-            //    transaction.Category = category.Name;
-            //    transaction.SubCategory = subCategory?.Name;
-
-            //}
             return Ok();
         }
     }

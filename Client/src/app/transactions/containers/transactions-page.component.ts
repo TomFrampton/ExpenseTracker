@@ -73,7 +73,7 @@ export class TransactionsPageComponent implements OnInit {
             description: t.description,
             date: t.date,
             amount: t.amount,
-            category: t.category ? (t.subCategory ? `${t.category} - ${t.subCategory}` : t.category) : '-'
+            category: t.category ? (t.subCategory ? `${t.category.name} - ${t.subCategory.name}` : t.category.name) : '-'
         }))
     }
 }

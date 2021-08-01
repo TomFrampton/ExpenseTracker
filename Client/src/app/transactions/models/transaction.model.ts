@@ -1,10 +1,11 @@
+import { TransactionCategory } from './transaction-category.model';
+
 export interface Transaction {
     id: number;
     date: Date;
     description: string;
     amount: number;
 
-    // To refactor
-    category: string;
-    subCategory: string;
+    category: TransactionCategory;
+    subCategory: TransactionCategory;
 }

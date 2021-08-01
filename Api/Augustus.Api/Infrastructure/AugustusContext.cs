@@ -36,14 +36,14 @@ namespace Augustus.Api.Infrastructure
             }
 
             modelBuilder.Entity<Transaction>().HasData(
-                new Transaction { Id = 1, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
-                new Transaction { Id = 2, Date = DateTime.Now, Description = "Asda", Amount = 3.29M },
-                new Transaction { Id = 3, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
-                new Transaction { Id = 4, Date = DateTime.Now, Description = "Asda", Amount = 3.29M },
-                new Transaction { Id = 5, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
-                new Transaction { Id = 6, Date = DateTime.Now, Description = "Asda", Amount = 3.29M },
-                new Transaction { Id = 7, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
-                new Transaction { Id = 8, Date = DateTime.Now, Description = "Asda", Amount = 3.29M }
+                new Transaction { Id = 1, Date = new DateTime(2021, 1, 1), Description = "Tesco", Amount = 4.99M },
+                new Transaction { Id = 2, Date = new DateTime(2021, 1, 2), Description = "Asda", Amount = 3.29M },
+                new Transaction { Id = 3, Date = new DateTime(2021, 1, 3), Description = "Tesco", Amount = 4.99M },
+                new Transaction { Id = 4, Date = new DateTime(2021, 1, 4), Description = "Asda", Amount = 3.29M },
+                new Transaction { Id = 5, Date = new DateTime(2021, 1, 5), Description = "Tesco", Amount = 4.99M },
+                new Transaction { Id = 6, Date = new DateTime(2021, 1, 6), Description = "Asda", Amount = 3.29M },
+                new Transaction { Id = 7, Date = new DateTime(2021, 1, 7), Description = "Tesco", Amount = 4.99M },
+                new Transaction { Id = 8, Date = new DateTime(2021, 1, 8), Description = "Asda", Amount = 3.29M }
             );
 
             modelBuilder.Entity<TransactionCategory>().HasData(
