@@ -39,7 +39,7 @@ export class TransactionsPageComponent implements OnInit {
             getTransactions(),
             this.refreshTransactions$.pipe(switchMap(() => getTransactions()))
         ).pipe(
-            delay(3000),
+            delay(1000),
             tap(() => this.loading = false),
             tap(trans => console.log(trans)),
             tap(trans => this.transactions = trans),

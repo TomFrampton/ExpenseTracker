@@ -39,6 +39,7 @@ namespace Augustus.Api.Services
             return await _context.TransactionCategories
                 .Include(x => x.SubCategories)
                 .AsNoTracking()
+                .Where(x => x.ParentId == null)
                 .ToListAsync();
         }
     }

@@ -35,25 +35,25 @@ namespace Augustus.Api.Infrastructure
                 property.SetScale(6);
             }
 
-            //modelBuilder.Entity<Transaction>().HasData(
-            //    new Transaction { Id = 1, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
-            //    new Transaction { Id = 2, Date = DateTime.Now, Description = "Asda", Amount = 3.29M },
-            //    new Transaction { Id = 3, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
-            //    new Transaction { Id = 4, Date = DateTime.Now, Description = "Asda", Amount = 3.29M },
-            //    new Transaction { Id = 5, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
-            //    new Transaction { Id = 6, Date = DateTime.Now, Description = "Asda", Amount = 3.29M },
-            //    new Transaction { Id = 7, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
-            //    new Transaction { Id = 8, Date = DateTime.Now, Description = "Asda", Amount = 3.29M }
-            //);
+            modelBuilder.Entity<Transaction>().HasData(
+                new Transaction { Id = 1, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
+                new Transaction { Id = 2, Date = DateTime.Now, Description = "Asda", Amount = 3.29M },
+                new Transaction { Id = 3, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
+                new Transaction { Id = 4, Date = DateTime.Now, Description = "Asda", Amount = 3.29M },
+                new Transaction { Id = 5, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
+                new Transaction { Id = 6, Date = DateTime.Now, Description = "Asda", Amount = 3.29M },
+                new Transaction { Id = 7, Date = DateTime.Now, Description = "Tesco", Amount = 4.99M },
+                new Transaction { Id = 8, Date = DateTime.Now, Description = "Asda", Amount = 3.29M }
+            );
 
-            //modelBuilder.Entity<TransactionCategory>().HasData(
-            //    new TransactionCategory { Id = 1, Name = "Groceries" },
-            //    new TransactionCategory { Id = 2, Name = "Amazon" },
-            //    new TransactionCategory { Id = 3, Name = "Eat Out" },
-            //        new TransactionCategory { Id = 301, Name = "Restaurant", ParentId = 3 },
-            //        new TransactionCategory { Id = 302, Name = "Pub", ParentId = 3 },
-            //        new TransactionCategory { Id = 303, Name = "Fast-Food", ParentId = 3 }
-            //);
+            modelBuilder.Entity<TransactionCategory>().HasData(
+                new TransactionCategory { Id = 1, Name = "Groceries" },
+                new TransactionCategory { Id = 2, Name = "Amazon" },
+                new TransactionCategory { Id = 3, Name = "Eat Out" },
+                    new TransactionCategory { Id = 301, Name = "Restaurant", ParentId = 3 },
+                    new TransactionCategory { Id = 302, Name = "Pub", ParentId = 3 },
+                    new TransactionCategory { Id = 303, Name = "Fast-Food", ParentId = 3 }
+            );
         }
     }
 }
