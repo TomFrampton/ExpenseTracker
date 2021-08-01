@@ -1,6 +1,9 @@
+using Augustus.Api.Infrastructure;
+using Augustus.Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -37,6 +40,13 @@ namespace Augustus.Api
                 });
             });
 
+            services.AddDbContext<AugustusContext>(options =>
+            {
+                options.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=Augustus");
+            });
+
+            services.AddTransient<ITransactionsService, TransactionsService>();
+
             services.AddControllers();
 
             services.AddSwaggerGen(options =>
@@ -68,6 +78,12 @@ namespace Augustus.Api
             {
                 endpoints.MapControllers();
             });
+
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<AugustusContext>();
+                context.Database.Migrate();
+            }
         }
     }
 }

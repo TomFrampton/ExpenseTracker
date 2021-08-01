@@ -8,7 +8,10 @@ namespace Augustus.Api.Models.Transactions
     public class TransactionCategory
     {
         public int Id { get; set; }
+        public int? ParentId { get; set; }
+
         public string Name { get; set; }
+
         public IEnumerable<TransactionCategory> SubCategories { get; set; } = new List<TransactionCategory>();
     }
 }
