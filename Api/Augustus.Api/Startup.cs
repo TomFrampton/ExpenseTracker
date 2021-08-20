@@ -42,7 +42,7 @@ namespace Augustus.Api
 
             services.AddDbContext<AugustusContext>(options =>
             {
-                options.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=Augustus");
+                options.UseSqlServer(Configuration.GetConnectionString("Augustus"));
             });
 
             services.AddTransient<ITransactionsService, TransactionsService>();
