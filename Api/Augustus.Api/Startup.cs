@@ -30,6 +30,8 @@ namespace Augustus.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddApplicationInsightsTelemetry();
+
             services.AddCors(options =>
             {
                 options.AddPolicy(DevelopmentCorsPolicy, builder =>
@@ -42,7 +44,10 @@ namespace Augustus.Api
 
             services.AddDbContext<AugustusContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("Augustus"));
+                options.UseSqlServer(Configuration.GetConnectionString("Augustus"), providerOptions =>
+                {
+                    providerOptions.EnableRetryOnFailure();
+                });
             });
 
             services.AddTransient<ITransactionsService, TransactionsService>();
