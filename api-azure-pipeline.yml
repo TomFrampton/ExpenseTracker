@@ -24,12 +24,26 @@ stages:
 
     steps:
     - task: DotNetCoreCLI@2
+      displayName: 'Install EF tool'
+      inputs:
+        command: custom
+        custom: 'tool'
+        arguments: install --global dotnet-ef
+
+    - task: DotNetCoreCLI@2
       displayName: 'Build with dotnet'
       inputs:
         command: 'build'
         projects: '$(projectFilepath)'
         configuration: '$(buildConfiguration)'
-        arguments: '--output $(Build.ArtifactStagingDirectory)'
+        arguments: '--output $(Build.ArtifactStagingDirectory)/api'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Create SQL migration script'
+      inputs:
+        command: 'custom'
+        custom: 'ef'
+        arguments: migrations script --output $(Build.ArtifactStagingDirectory)/sql/Migrations.sql --idempotent --project $(projectFilepath)
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish build artifacts'
@@ -40,29 +54,51 @@ stages:
 
 - stage: Deploy
   jobs:
-  - job: Deploy
+  - deployment: Deploy
     pool:
       vmImage: windows-2019
 
-    steps:
-    - task: DownloadBuildArtifacts@1
-      displayName: 'Download build artifacts'
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        downloadPath: '$(System.ArtifactsDirectory)'
-        artifactName: 'drop'
+    environment: 'Production'
 
-    - task: AzureRmWebAppDeployment@4
-      displayName: 'Deploy to Azure'
-      inputs:
-        ConnectionType: 'AzureRM'
-        azureSubscription: 'leconfield-software(af4597b8-06f3-421c-b812-b8bf6057a731)'
-        appType: 'webApp'
-        WebAppName: 'augustus-api'
-        VirtualApplication: '/api'
-        packageForLinux: '$(System.ArtifactsDirectory)/drop'
-        enableCustomDeployment: true
-        DeploymentType: 'webDeploy'
-        RemoveAdditionalFilesFlag: true
-        
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@1
+            displayName: 'Download build artifacts'
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              downloadPath: '$(System.ArtifactsDirectory)'
+              artifactName: 'drop'
+
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'Deploy to Azure'
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Augustus'
+              appType: 'webApp'
+              WebAppName: 'augustus-api'
+              VirtualApplication: '/api'
+              packageForLinux: '$(System.ArtifactsDirectory)/drop/api'
+              enableCustomDeployment: true
+              DeploymentType: 'webDeploy'
+              RemoveAdditionalFilesFlag: true
+
+          - task: AzureKeyVault@2
+            displayName: Retrieve connection string from Azure Key Vault
+            inputs:
+              azureSubscription: 'Augustus'
+              KeyVaultName: 'augustus'
+              SecretsFilter: '*'
+              RunAsPreJob: false
+
+          - task: SqlAzureDacpacDeployment@1
+            displayName: Run SQL migrations
+            inputs:
+              azureSubscription: 'Augustus'
+              AuthenticationType: 'connectionString'
+              ConnectionString: '$(ConnectionString)'
+              deployType: 'SqlTask'
+              SqlFile: '$(System.ArtifactsDirectory)/drop/sql/Migrations.sql'
+              IpDetectionMethod: 'AutoDetect'

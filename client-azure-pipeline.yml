@@ -55,28 +55,33 @@ stages:
 
 - stage: Deploy
   jobs:
-  - job: Deploy
-  
+  - deployment: Deploy
+
     pool:
       vmImage: windows-2019
 
-    steps:
-    - task: DownloadBuildArtifacts@1
-      displayName: 'Download build artifacts'
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        downloadPath: '$(System.ArtifactsDirectory)'
-        artifactName: 'drop'
+    environment: 'Production'
 
-    - task: AzureRmWebAppDeployment@4
-      displayName: 'Deploy to Azure'
-      inputs:
-        ConnectionType: 'AzureRM'
-        azureSubscription: 'leconfield-software(af4597b8-06f3-421c-b812-b8bf6057a731)'
-        appType: 'webApp'
-        WebAppName: 'augustus-api'
-        packageForLinux: '$(System.ArtifactsDirectory)/drop'
-        enableCustomDeployment: true
-        DeploymentType: 'webDeploy'
-        RemoveAdditionalFilesFlag: true
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@1
+            displayName: 'Download build artifacts'
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              downloadPath: '$(System.ArtifactsDirectory)'
+              artifactName: 'drop'
+
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'Deploy to Azure'
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Augustus'
+              appType: 'webApp'
+              WebAppName: 'augustus-api'
+              packageForLinux: '$(System.ArtifactsDirectory)/drop'
+              enableCustomDeployment: true
+              DeploymentType: 'webDeploy'
+              RemoveAdditionalFilesFlag: true
