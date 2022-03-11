@@ -15,65 +15,64 @@ import { TransactionService } from '../services/transaction.service';
     templateUrl: './transactions-page.component.html',
     styleUrls: ['./transactions-page.component.scss']
 })
-export class TransactionsPageComponent implements OnInit {
-    loading = true;
+export class TransactionsPageComponent {
+    // // loading$ = this.transactionService.loading$;
 
-    transactions: Transaction[];
-    transactionRows$: Observable<TransactionTableRow[]>;
-    transactionCategories$: Observable<TransactionCategory[]>;
+    // // transactions: Transaction[];
+    // // transactionRows$: Observable<TransactionTableRow[]>;
+    // // transactionCategories$: Observable<TransactionCategory[]>;
 
-    refreshTransactions$ = new Subject<void>();
+    // // refreshTransactions$ = new Subject<void>();
 
-    selectedTransactions: Transaction[] = [];
+    // // selectedTransactions: Transaction[] = [];
 
-    get selectedTransactionIds(): number[] {
-        return this.selectedTransactions?.map(x => x.id) || [];
-    }
+    // get selectedTransactionIds(): number[] {
+    //     return this.selectedTransactions?.map(x => x.id) || [];
+    // }
 
-    constructor(private transactionService: TransactionService) {}
+    // constructor(private transactionService: TransactionService) {}
 
-    ngOnInit() {
-        const getTransactions = () => this.transactionService.getAll();
+    // ngOnInit() {
+    //     const getTransactions = () => this.transactionService.getAll();
 
-        this.transactionRows$ = merge(
-            getTransactions(),
-            this.refreshTransactions$.pipe(switchMap(() => getTransactions()))
-        ).pipe(
-            delay(1000),
-            tap(() => this.loading = false),
-            tap(trans => console.log(trans)),
-            tap(trans => this.transactions = trans),
-            map(trans => this.mapTransactions(trans))
-        );
+    //     this.transactionRows$ = merge(
+    //         getTransactions(),
+    //         this.refreshTransactions$.pipe(switchMap(() => getTransactions()))
+    //     ).pipe(
+    //         delay(1000),
+    //         tap(() => this.transactionService.loading = false),
+    //         tap(trans => this.transactions = trans),
+    //         map(trans => this.mapTransactions(trans))
+    //     );
 
-        this.transactionCategories$ = this.transactionService.getCategories().pipe(
-            delay(1000)
-        );
-    }
+    //     this.transactionCategories$ = this.transactionService.getCategories().pipe(
+    //         delay(1000)
+    //     );
+    // }
 
-    onTransactionSelectionChange(ids: Id<Transaction>[]) {
-        this.selectedTransactions = ids.map(id => this.transactions.find(x => x.id === id));
-    }
+    // onTransactionSelectionChange(ids: Id<Transaction>[]) {
+    //     this.selectedTransactions = ids.map(id => this.transactions.find(x => x.id === id));
+    // }
 
-    onCategorise(categorisation: TransactionCategorisation) {
-        const request = {
-            ...categorisation,
-            transactionIds: this.selectedTransactionIds
-        };
+    // onCategorise(categorisation: TransactionCategorisation) {
+    //     const request = {
+    //         ...categorisation,
+    //         transactionIds: this.selectedTransactionIds
+    //     };
 
-        this.transactionService.categorise(request).subscribe(result => {
-            this.loading = true;
-            this.refreshTransactions$.next();
-        });
-    }
+    //     this.transactionService.categorise(request).subscribe(result => {
+    //         this.transactionService.loading = true;
+    //         this.refreshTransactions$.next();
+    //     });
+    // }
 
-    private mapTransactions(transations: Transaction[]): TransactionTableRow[] {
-        return transations.map(t => ({
-            id: t.id,
-            description: t.description,
-            date: t.date,
-            amount: t.amount,
-            category: t.category ? (t.subCategory ? `${t.category.name} - ${t.subCategory.name}` : t.category.name) : '-'
-        }))
-    }
+    // private mapTransactions(transations: Transaction[]): TransactionTableRow[] {
+    //     return transations.map(t => ({
+    //         id: t.id,
+    //         description: t.description,
+    //         date: t.date,
+    //         amount: t.amount,
+    //         category: t.category ? (t.subCategory ? `${t.category.name} - ${t.subCategory.name}` : t.category.name) : '-'
+    //     }))
+    // }
 }

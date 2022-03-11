@@ -5,9 +5,11 @@ import { RouterModule } from '@angular/router';
 // Angular Material
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 // Augutus
 import { NavbarComponent } from './navbar/navbar.component';
+import { CardLoadingSpinnerComponent } from './loading-spinner/card-loading-spinner.component';
 
 @NgModule({
     imports: [
@@ -16,12 +18,17 @@ import { NavbarComponent } from './navbar/navbar.component';
 
         // Material
         MatToolbarModule,
-        MatButtonModule
+        MatButtonModule,
+        MatProgressSpinnerModule
     ],
 
-    exports: [NavbarComponent],
+    exports: [
+        CardLoadingSpinnerComponent,
+        NavbarComponent
+    ],
 
     declarations: [
+        CardLoadingSpinnerComponent,
         NavbarComponent
     ]
 })

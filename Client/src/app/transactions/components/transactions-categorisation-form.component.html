@@ -21,7 +21,7 @@
         </mat-select>
     </mat-form-field>
 
-    <button mat-raised-button color="primary">
+    <button mat-raised-button color="primary" [disabled]="!categoriseEnabled">
         Categorise {{transactions.length}} transaction<ng-container *ngIf="transactions.length > 1">s</ng-container>
     </button>
 

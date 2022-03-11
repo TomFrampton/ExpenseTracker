@@ -19,6 +19,7 @@ export class TransactionsCategorisationFormComponent implements OnInit, OnChange
 
     @Input() transactions: Transaction[];
     @Input() categories: TransactionCategory[];
+    @Input() categoriseEnabled: boolean;
 
     @Output() categorise = new EventEmitter<TransactionCategorisation>();
 
@@ -27,7 +28,7 @@ export class TransactionsCategorisationFormComponent implements OnInit, OnChange
     form: FormGroup;
 
     constructor(private formBuilder: FormBuilder) {
-        window['sut'] = this;
+
     }
 
     ngOnInit(): void {

@@ -4,6 +4,20 @@
     flex-grow: 1;
 }
 
+.content-container {
+    padding: 16px;
+    flex-grow: 1;
+}
+
+mat-card-content {
+    margin-left: -16px;
+    margin-right: -16px;
+}
+
+.golden-ratio-large {
+    margin-right: 16px;
+}
+
 mat-progress-bar {
     position: absolute;
 }
@@ -17,6 +31,5 @@ mat-nav-list {
 }
 
 .active-link {
-    font-weight: 500;
-    background: rgba(0, 0, 0, 0.04); // TODO - Use theming
+    color: red;
 }

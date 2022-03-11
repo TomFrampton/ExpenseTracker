@@ -1,1 +1,1 @@
-export interface Id<T> extends Number {}
+export class Id<T> extends Number {}

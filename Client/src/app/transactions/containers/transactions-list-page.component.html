@@ -1,32 +1,20 @@
-<!-- <mat-progress-bar *ngIf="loading$ | async" mode="indeterminate"></mat-progress-bar> -->
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
 
-<mat-nav-list class="mat-elevation-z1">
-    <a mat-list-item matLine routerLink="./list" routerLinkActive="active-link">
-        Categorise
-    </a>
-    <a mat-list-item matLine routerLink="./categories" routerLinkActive="active-link">
-        Manage Categories
-    </a>
-    <mat-list-item>
-        <a matLine href="#">Upload Transactions</a>
-    </mat-list-item>
-</mat-nav-list>
-
-<router-outlet></router-outlet>
-
-<!-- <div class="content-container">
-    <ng-container *ngIf="(transactionRows$ | async) as transactions">
+<div class="content-container">
+    <ng-container>
         <div class="golden-ratio-container">
             <div class="golden-ratio-large">
                 <mat-card>
-                    <mat-card-title>
+                    <mat-card-title class="flex">
                         <h2>Transactions</h2>
+                        <div class="flex-spacer"></div>
                     </mat-card-title>
 
                     <mat-divider></mat-divider>
 
                     <mat-card-content>
                         <aug-transactions-table
+                            *ngIf="(transactionRows$ | async) as transactions; else loading"
                             [transactions]="transactions"
                             (transactionSelectionChange)="onTransactionSelectionChange($event)">
                         </aug-transactions-table>
@@ -43,12 +31,15 @@
                     <mat-divider></mat-divider>
 
                     <mat-card-content>
-                        <aug-transactions-categorisation-form
-                            *ngIf="selectedTransactions.length; else noTransactionsSelected"
-                            [transactions]="selectedTransactions"
-                            [categories]="transactionCategories$ | async"
-                            (categorise)="onCategorise($event)">
-                        </aug-transactions-categorisation-form>
+                        <ng-container *ngIf="(transactionCategories$ | async) as transactionCategories; else loading">
+                            <aug-transactions-categorisation-form
+                                *ngIf="selectedTransactions.length; else noTransactionsSelected"
+                                [transactions]="selectedTransactions"
+                                [categories]="transactionCategories"
+                                [categoriseEnabled]="!isLoading"
+                                (categorise)="onCategorise($event)">
+                            </aug-transactions-categorisation-form>
+                        </ng-container>
                     </mat-card-content>
                 </mat-card>
             </div>
@@ -58,5 +49,9 @@
 
 <ng-template #noTransactionsSelected>
     <p class="aug-mat-card-placeholder">Select transactions to categorise</p>
-</ng-template> -->
+</ng-template>
+
+<ng-template #loading>
+    <aug-card-loading-spinner></aug-card-loading-spinner>
+</ng-template>
 

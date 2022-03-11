@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { Transaction } from '../models/transaction.model';
 import { TransactionCategory } from '../models/transaction-category.model';
 import { TransactionCategorisationRequest } from '../models/transaction-categorisation.model';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 
 @Injectable()

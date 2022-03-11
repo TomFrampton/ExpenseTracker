@@ -59,6 +59,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     align-items: center;
 }
 
-mat-card-content {
-    min-height: 180px;
+app-root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
