@@ -1,0 +1,16 @@
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+<div class="content-container">
+    <mat-card>
+        <mat-card-title class="flex">
+            <h2>Upload Transactions</h2>
+            <div class="flex-spacer"></div>
+        </mat-card-title>
+
+        <mat-divider></mat-divider>
+
+        <mat-card-content>
+            <aug-transactions-upload-form #formComponent (upload)="onUpload($event)"></aug-transactions-upload-form>
+        </mat-card-content>
+    </mat-card>
+</div>

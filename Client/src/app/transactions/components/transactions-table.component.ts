@@ -10,7 +10,8 @@ import { Transaction } from '@aug/transactions/models/transaction.model';
 export interface TransactionTableRow {
     id: Id<Transaction>;
     description: string;
-    amount: number;
+    creditAmount: number;
+    debitAmount: number;
     date: Date;
     category: string;
 }
@@ -23,7 +24,7 @@ export interface TransactionTableRow {
 export class TransactionsTableComponent implements OnChanges, OnDestroy {
     private destroy$ = new Subject();
 
-    columns = ['selected', 'description', 'amount', 'category', 'actions'];
+    columns = ['selected', 'description', 'creditAmount', 'debitAmount', 'category', 'actions'];
 
     form: FormGroup;
 

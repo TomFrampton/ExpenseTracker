@@ -1,0 +1,23 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="pad-top pad-bottom">
+        <div class="pad-bottom">
+            Please select an excel file containing a list of transactions.
+        </div>
+
+        <button mat-raised-button color="basic" type="button" (click)="fileUpload.click()">
+            Select transactions file
+        </button>
+
+        <span class="pad-left">{{fileName || 'No file selected' }}</span>
+
+        <input #fileUpload type="file" class="hide" (change)="onFileSelected($event)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="flex pad-top">
+        <button mat-raised-button color="primary" class="upload-btn" [disabled]="!file">
+            Upload transactions
+        </button>
+    </div>
+</form>

@@ -1,5 +1,7 @@
 ﻿using Augustus.Api.Models;
+using Augustus.Api.Models.Transactions;
 using Augustus.Api.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -10,9 +12,9 @@ namespace Augustus.Api.Controllers
     [Route("[controller]")]
     public class TransactionsController : ControllerBase
     {
-        private readonly ITransactionsService _transactionsService;
+        private readonly TransactionsService _transactionsService;
 
-        public TransactionsController(ITransactionsService transactionsService)
+        public TransactionsController(TransactionsService transactionsService)
         {
             _transactionsService = transactionsService ?? throw new ArgumentNullException(nameof(transactionsService));
         }
@@ -47,8 +49,14 @@ namespace Augustus.Api.Controllers
         public async Task<IActionResult> Categorise([FromBody] TransactionCategorisationRequest model)
         {
             await _transactionsService.CategoriseTransactions(model);
-
             return Ok();
+        }
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> Upload(IFormFile file)
+        {
+            TransactionImportResponse result = await _transactionsService.UploadTransactions(file);
+            return Ok(result);
         }
     }
 }

@@ -1,3 +1,4 @@
+using Augustus.Api.Application.Transactions;
 using Augustus.Api.Infrastructure;
 using Augustus.Api.Services;
 using Microsoft.AspNetCore.Builder;
@@ -50,7 +51,8 @@ namespace Augustus.Api
                 });
             });
 
-            services.AddTransient<ITransactionsService, TransactionsService>();
+            services.AddTransient<TransactionsService>();
+            services.AddTransient<ExcelTransactionsParser>();
 
             services.AddControllers();
 

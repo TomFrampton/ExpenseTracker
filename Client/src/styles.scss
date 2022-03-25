@@ -39,6 +39,27 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .full-width { width: 100%; }
 
+.hide {
+    display: none;
+}
+
+.content-container {
+    padding: 16px;
+    flex-grow: 1;
+}
+
+.pad-top {
+    padding-top: 16px;
+}
+
+.pad-bottom {
+    padding-bottom: 16px;
+}
+
+.pad-left {
+    padding-left: 16px;
+}
+
 .golden-ratio-container {
     display: flex;
     flex-direction: row;

@@ -1,6 +1,8 @@
-﻿using Augustus.Api.Infrastructure;
+﻿using Augustus.Api.Application.Transactions;
+using Augustus.Api.Infrastructure;
 using Augustus.Api.Models;
 using Augustus.Api.Models.Transactions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,20 +11,14 @@ using System.Threading.Tasks;
 
 namespace Augustus.Api.Services
 {
-    public interface ITransactionsService
+    public class TransactionsService
     {
-        Task<IEnumerable<Transaction>> GetTransactions();
-        Task<Transaction> GetTransaction(int id);
-        Task<IEnumerable<TransactionCategory>> GetTransactionCategories();
-        Task CategoriseTransactions(TransactionCategorisationRequest model);
-    }
-
-    public class TransactionsService : ITransactionsService
-    {
+        private readonly ExcelTransactionsParser _excelTransactionsParser;
         private readonly AugustusContext _context;
 
-        public TransactionsService(AugustusContext context)
+        public TransactionsService(ExcelTransactionsParser excelTransactionsParser, AugustusContext context)
         {
+            _excelTransactionsParser = excelTransactionsParser ?? throw new ArgumentNullException(nameof(excelTransactionsParser));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
@@ -31,6 +27,9 @@ namespace Augustus.Api.Services
             return await _context.Transactions
                 .Include(x => x.Category)
                 .Include(x => x.SubCategory)
+                .OrderBy(x => x.Date)
+                // Fix once paging is implemented
+                .Take(50)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -71,6 +70,69 @@ namespace Augustus.Api.Services
             }
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<TransactionImportResponse> UploadTransactions(IFormFile excelFile)
+        {
+            IEnumerable<ExcelTransaction> excelTransactions = _excelTransactionsParser.ParseTransactions(excelFile);
+            List<Transaction> entityTransactions = await _context.Transactions.ToListAsync();
+
+            List<TransactionPair> leftJoin = excelTransactions.GroupJoin(
+                entityTransactions,
+                excel => new
+                {
+                    Date = excel.TransactionDate,
+                    Description = excel.TransactionDescription,
+                    CreditAmount = excel.CreditAmount,
+                    DebitAmount = excel.DebitAmount
+                },
+                entity => new
+                {
+                    Date = entity.Date,
+                    Description = entity.Description,
+                    CreditAmount = entity.CreditAmount,
+                    DebitAmount = entity.DebitAmount
+                },
+                (excel, entity) => new { excel, entity }
+            )
+            .SelectMany(
+                x => x.entity.DefaultIfEmpty(),
+                (x, entity) => new TransactionPair
+                {
+                    Excel = x.excel,
+                    Entity = entity
+                }
+            )
+            .OrderByDescending(x => x.Excel.OrderId)
+            .ToList();
+
+            // TODO  - Add balance possibly to improve duplicate detection
+
+            List<Transaction> transactionsToAdd = leftJoin
+                .Where(pair => pair.Entity == null)
+                .Select(pair => new Transaction
+                {
+                    Date = pair.Excel.TransactionDate,
+                    Description = pair.Excel.TransactionDescription,
+                    CreditAmount = pair.Excel.CreditAmount,
+                    DebitAmount = pair.Excel.DebitAmount
+                })
+                .ToList();
+
+            await _context.AddRangeAsync(transactionsToAdd);
+            await _context.SaveChangesAsync();
+
+            return new TransactionImportResponse
+            {
+                ImportedTransactionsCount = transactionsToAdd.Count,
+                IgnoredTransactionsCount = leftJoin.Count(pair => pair.Entity != null && pair.Excel != null)
+            };
+        }
+
+        private class TransactionPair
+        {
+            public ExcelTransaction Excel { get; set; }
+            public Transaction Entity { get; set; }
         }
     }
 }

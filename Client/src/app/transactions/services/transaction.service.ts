@@ -22,10 +22,18 @@ export class TransactionService {
     }
 
     getCategories(): Observable<TransactionCategory[]> {
-        return this.httpClient.get<TransactionCategory[]>(`./transactions/categories`);
+        return this.httpClient.get<TransactionCategory[]>('./transactions/categories');
     }
 
     categorise(request: TransactionCategorisationRequest): Observable<any> {
-        return this.httpClient.post(`./transactions/categorise`, request);
+        return this.httpClient.post('./transactions/categorise', request);
+    }
+
+    upload(file: File) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        return this.httpClient.post('./transactions/upload', formData);
+
     }
 }

@@ -16,19 +16,32 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AugustusCommonModule } from '@aug/common/common.module';
 
-import { TransactionService } from '@aug/transactions/services/transaction.service';
-import { TransactionsPageComponent, TransactionsCategoriesPageComponent, TransactionsListPageComponent } from '@aug/transactions/containers';
-import { TransactionsTableComponent } from '@aug/transactions/components/transactions-table.component';
-import { TransactionDetailFormComponent } from '@aug/transactions/components/transaction-detail-form.component';
-import { TransactionsCategorisationFormComponent } from '@aug/transactions/components/transactions-categorisation-form.component';
+import { TransactionService } from './services/transaction.service';
+
+import {
+    TransactionsPageComponent,
+    TransactionsCategoriesPageComponent,
+    TransactionsListPageComponent,
+    TransactionsUploadPageComponent
+} from './containers';
+
+import {
+    TransactionDetailFormComponent,
+    TransactionsCategorisationFormComponent,
+    TransactionsTableComponent,
+    TransactionsUploadFormComponent
+} from './components';
+
 
 const routes: Routes = [
     { path: 'transactions', component: TransactionsPageComponent, children: [
         { path: 'list', component: TransactionsListPageComponent },
         { path: 'categories', component: TransactionsCategoriesPageComponent },
+        { path: 'upload', component: TransactionsUploadPageComponent },
         { path: '**', redirectTo: 'list' }
     ]},
 ];
@@ -51,6 +64,7 @@ const routes: Routes = [
         MatListModule,
         MatIconModule,
         MatProgressSpinnerModule,
+        MatSnackBarModule,
 
         AugustusCommonModule
     ],
@@ -60,11 +74,13 @@ const routes: Routes = [
         TransactionsPageComponent,
         TransactionsListPageComponent,
         TransactionsCategoriesPageComponent,
+        TransactionsUploadPageComponent,
 
         // Components
         TransactionsTableComponent,
         TransactionDetailFormComponent,
-        TransactionsCategorisationFormComponent
+        TransactionsCategorisationFormComponent,
+        TransactionsUploadFormComponent
     ],
 
     providers: [

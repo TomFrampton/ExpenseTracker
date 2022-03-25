@@ -1,0 +1,14 @@
+:host {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.content-container {
+    padding: 16px;
+    flex-grow: 1;
+}
+
+mat-progress-bar {
+    position: absolute;
+}
