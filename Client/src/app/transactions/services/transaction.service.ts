@@ -1,20 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { Transaction } from '../models/transaction.model';
-import { TransactionCategory } from '../models/transaction-category.model';
-import { TransactionCategorisationRequest } from '../models/transaction-categorisation.model';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { Transaction, TransactionCategorisationRequest, TransactionCategory, TransactionPaginationResponse } from '../models';
+import { delay } from 'rxjs/operators';
 
 
 @Injectable()
 export class TransactionService {
     constructor(private httpClient: HttpClient) {}
 
-    getAll(): Observable<Transaction[]> {
-        return this.httpClient.get<Transaction[]>('./transactions');
+    getPaged(pageSize: number, pageNumber = 1) {
+        const params = {
+            pageSize: pageSize.toString(),
+            pageNumber: pageNumber.toString()
+        };
+
+        return this.httpClient.get<TransactionPaginationResponse>('./transactions', { params });
     }
 
     getById(transactionId: number): Observable<Transaction> {
@@ -26,7 +29,7 @@ export class TransactionService {
     }
 
     categorise(request: TransactionCategorisationRequest): Observable<any> {
-        return this.httpClient.post('./transactions/categorise', request);
+        return this.httpClient.post('./transactions/categorise', request).pipe(delay(2000));
     }
 
     upload(file: File) {

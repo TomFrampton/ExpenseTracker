@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+
+import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
+import { tap, map, switchMap, shareReplay } from 'rxjs/operators';
+
 import { Id } from '@aug/common/id';
+import { PaginationSettings, PaginationSummary } from '@aug/common/pagination';
 
-import { merge, Observable, Subject } from 'rxjs';
-import { tap, map, delay, switchMap } from 'rxjs/operators';
-
-import { TransactionTableRow } from '../components/transactions-table.component';
-import { TransactionCategorisation } from '../models/transaction-categorisation.model';
-import { TransactionCategory } from '../models/transaction-category.model';
-import { Transaction } from '../models/transaction.model';
-import { TransactionService } from '../services/transaction.service';
+import { TransactionService } from '../services';
+import { TransactionTableRow } from '../components';
+import { Transaction, TransactionCategorisation, TransactionCategory } from '../models';
 
 
 @Component({
@@ -20,9 +20,13 @@ export class TransactionsListPageComponent implements OnInit {
     transactionCategories$: Observable<TransactionCategory[]>;
     refreshTransactions$ = new Subject<void>();
 
+    pagination$: Observable<PaginationSummary>;
+    paginationChange$ = new BehaviorSubject<PaginationSettings>({ pageSize: 5, pageNumber: 1 });
+
     transactions: Transaction[];
     selectedTransactions: Transaction[] = [];
 
+    transactionsFirstLoad = true;
     transactionsLoading = true;
     transactionCategoriesLoading = true;
     categorising = false;
@@ -35,34 +39,51 @@ export class TransactionsListPageComponent implements OnInit {
         return this.selectedTransactions?.map(x => x.id) || [];
     }
 
-    constructor(private transactionService: TransactionService) {
-        window['sut'] = this;
-    }
+    constructor(private transactionService: TransactionService) {}
 
     ngOnInit() {
         const getTransactions = () => {
             this.transactionsLoading = true;
-            return this.transactionService.getAll();
+            const { pageSize, pageNumber } = this.paginationChange$.value;
+            return this.transactionService.getPaged(pageSize, pageNumber);
         };
 
-        this.transactionRows$ = merge(
-            getTransactions(),
-            this.refreshTransactions$.pipe(switchMap(() => getTransactions()))
+        const transactionsResponse$ = merge(
+            this.refreshTransactions$.pipe(switchMap(() => getTransactions())),
+            this.paginationChange$.pipe(switchMap(() => getTransactions()))
         ).pipe(
-            delay(2000),
-            tap(() => this.transactionsLoading = false),
-            tap(trans => this.transactions = trans),
-            map(trans => this.mapTransactions(trans))
+            shareReplay(1)
+        );
+
+        this.transactionRows$ = transactionsResponse$.pipe(
+            tap(() => {
+                this.transactionsFirstLoad = false
+                this.transactionsLoading = false;
+            }),
+            tap(response => this.transactions = response.transactions),
+            map(response => this.mapTransactions(response.transactions))
+        );
+
+        this.pagination$ = transactionsResponse$.pipe(
+            map(response => ({
+                totalPages: response.totalPages,
+                totalItems: response.totalTransactionsCount,
+                pageSize: this.paginationChange$.value.pageSize,
+                pageNumber: this.paginationChange$.value.pageNumber
+            }))
         );
 
         this.transactionCategories$ = this.transactionService.getCategories().pipe(
-            delay(1000),
-            tap(() => this.transactionCategoriesLoading = false),
+            tap(() => this.transactionCategoriesLoading = false)
         );
     }
 
     onTransactionSelectionChange(ids: Id<Transaction>[]) {
         this.selectedTransactions = ids.map(id => this.transactions.find(x => x.id === id));
+    }
+
+    onPaginationChange(settings: PaginationSettings) {
+        this.paginationChange$.next(settings);
     }
 
     onCategorise(categorisation: TransactionCategorisation) {

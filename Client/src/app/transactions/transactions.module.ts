@@ -17,10 +17,11 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { AugustusCommonModule } from '@aug/common/common.module';
 
-import { TransactionService } from './services/transaction.service';
+import { TransactionService } from './services';
 
 import {
     TransactionsPageComponent,
@@ -65,6 +66,7 @@ const routes: Routes = [
         MatIconModule,
         MatProgressSpinnerModule,
         MatSnackBarModule,
+        MatPaginatorModule,
 
         AugustusCommonModule
     ],

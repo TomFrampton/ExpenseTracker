@@ -7,7 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using static Augustus.Api.Controllers.TransactionsController;
 
 namespace Augustus.Api.Services
 {
@@ -22,16 +24,31 @@ namespace Augustus.Api.Services
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<Transaction>> GetTransactions()
+        public async Task<TransactionPaginationResponse> GetTransactions(TransactionPaginationRequest pagination, CancellationToken cancellationToken)
         {
-            return await _context.Transactions
+            int pageNumber = pagination.PageNumber ?? 1;
+            int pageSize = pagination.PageSize ?? 100;
+
+            int skipCount = (pageNumber - 1) * pageSize;
+
+            List<Transaction> transactions = await _context.Transactions
                 .Include(x => x.Category)
                 .Include(x => x.SubCategory)
                 .OrderBy(x => x.Date)
-                // Fix once paging is implemented
-                .Take(50)
+                .Skip(skipCount)
+                .Take(pageSize)
                 .AsNoTracking()
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
+
+            int totalTransactionsCount = await _context.Transactions.CountAsync(cancellationToken);
+            int totalPages = (int) Math.Ceiling((double) totalTransactionsCount / pageSize);
+
+            return new TransactionPaginationResponse
+            {
+                Transactions = transactions,
+                TotalTransactionsCount = totalTransactionsCount,
+                TotalPages = totalPages
+            };
         }
 
         public async Task<Transaction> GetTransaction(int id)

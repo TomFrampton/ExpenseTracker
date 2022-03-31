@@ -1,11 +1,15 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { PageEvent } from '@angular/material/paginator';
 
 import { combineLatest, Subject } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 
 import { Id } from '@aug/common/id';
-import { Transaction } from '@aug/transactions/models/transaction.model';
+import { PaginationSettings, PaginationSummary } from '@aug/common/pagination';
+
+import { Transaction } from '../models';
+
 
 export interface TransactionTableRow {
     id: Id<Transaction>;
@@ -24,13 +28,15 @@ export interface TransactionTableRow {
 export class TransactionsTableComponent implements OnChanges, OnDestroy {
     private destroy$ = new Subject();
 
-    columns = ['selected', 'description', 'creditAmount', 'debitAmount', 'category', 'actions'];
+    columns = ['selected', 'description', 'creditAmount', 'debitAmount', 'category'];
 
     form: FormGroup;
 
     @Input() transactions: TransactionTableRow[];
+    @Input() pagination: PaginationSummary;
 
     @Output() transactionSelectionChange = new EventEmitter<Id<Transaction>[]>();
+    @Output() paginationChange = new EventEmitter<PaginationSettings>();
 
     get transactionsControl(): FormArray {
         return this.form && this.form.controls.transactions as FormArray;
@@ -61,6 +67,10 @@ export class TransactionsTableComponent implements OnChanges, OnDestroy {
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
+    }
+
+    onPaginatorChange(event: PageEvent) {
+        this.paginationChange.emit({ pageNumber: event.pageIndex + 1, pageSize: event.pageSize });
     }
 
     private buildForm() {

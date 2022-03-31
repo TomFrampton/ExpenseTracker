@@ -80,6 +80,29 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     align-items: center;
 }
 
+.aug-mat-card-overlay {
+    position: absolute;
+    height: calc(100% - 2px);
+    width: calc(100% - 2px);
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 999;
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    top: 1px;
+    left: 1px;
+}
+
+.mat-card-content {
+    margin-bottom: 0 !important;
+    position: relative;
+}
+
+.mat-divider {
+    z-index: 9;
+}
+
 app-root {
     display: flex;
     flex-direction: column;

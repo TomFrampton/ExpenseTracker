@@ -4,6 +4,7 @@ using Augustus.Api.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Augustus.Api.Controllers
@@ -20,9 +21,9 @@ namespace Augustus.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetPaged([FromQuery] TransactionPaginationRequest pagination, CancellationToken cancellationToken)
         {
-            return Ok(await _transactionsService.GetTransactions());
+            return Ok(await _transactionsService.GetTransactions(pagination, cancellationToken));
         }
 
         [HttpGet("{id:int}")]

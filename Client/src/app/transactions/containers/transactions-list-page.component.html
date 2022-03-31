@@ -16,16 +16,26 @@
                         <aug-transactions-table
                             *ngIf="(transactionRows$ | async) as transactions; else loading"
                             [transactions]="transactions"
-                            (transactionSelectionChange)="onTransactionSelectionChange($event)">
+                            (transactionSelectionChange)="onTransactionSelectionChange($event)"
+                            [pagination]="pagination$ | async"
+                            (paginationChange)="onPaginationChange($event)">
                         </aug-transactions-table>
+
+                        <div *ngIf="!transactionsFirstLoad && isLoading" class="aug-mat-card-overlay">
+                            <mat-spinner [diameter]="30"></mat-spinner>
+                        </div>
                     </mat-card-content>
+
+                    <!-- <div *ngIf="!transactionsFirstLoad && transactionsLoading" class="aug-mat-card-overlay">
+                        <mat-spinner [diameter]="30"></mat-spinner>
+                    </div> -->
                 </mat-card>
             </div>
 
             <div class="golden-ratio-small">
                 <mat-card>
                     <mat-card-title>
-                        <h2>Transactions</h2>
+                        <h2>Categorise Transactions</h2>
                     </mat-card-title>
 
                     <mat-divider></mat-divider>
@@ -40,6 +50,10 @@
                                 (categorise)="onCategorise($event)">
                             </aug-transactions-categorisation-form>
                         </ng-container>
+
+                        <div *ngIf="categorising" class="aug-mat-card-overlay">
+                            <mat-spinner [diameter]="30"></mat-spinner>
+                        </div>
                     </mat-card-content>
                 </mat-card>
             </div>
