@@ -9,19 +9,27 @@ import { PaginationSettings, PaginationSummary } from '@aug/common/pagination';
 import { TransactionService } from '../services';
 import { TransactionTableRow } from '../components';
 import { Transaction, TransactionCategorisation, TransactionCategory } from '../models';
+import { SortDirection } from '@angular/material/sort';
 
+export interface TransactionQueryParams {
+    pageSize?: number;
+    pageNumber?: number;
+    searchTerm?: string;
+    dateSortDirection?: string;
+}
 
 @Component({
     templateUrl: './transactions-list-page.component.html',
     styleUrls: ['./transactions-list-page.component.scss']
 })
 export class TransactionsListPageComponent implements OnInit {
+    private readonly refreshTransactions$ = new Subject<void>();
+    private readonly queryChange$ = new BehaviorSubject<TransactionQueryParams>({ pageSize: 5, pageNumber: 1, searchTerm: null, dateSortDirection: null });
+
     transactionRows$: Observable<TransactionTableRow[]>;
     transactionCategories$: Observable<TransactionCategory[]>;
-    refreshTransactions$ = new Subject<void>();
-
+    searchResultSummary$: Observable<string>;
     pagination$: Observable<PaginationSummary>;
-    paginationChange$ = new BehaviorSubject<PaginationSettings>({ pageSize: 5, pageNumber: 1 });
 
     transactions: Transaction[];
     selectedTransactions: Transaction[] = [];
@@ -44,13 +52,12 @@ export class TransactionsListPageComponent implements OnInit {
     ngOnInit() {
         const getTransactions = () => {
             this.transactionsLoading = true;
-            const { pageSize, pageNumber } = this.paginationChange$.value;
-            return this.transactionService.getPaged(pageSize, pageNumber);
+            return this.transactionService.getList(this.queryChange$.value);
         };
 
         const transactionsResponse$ = merge(
             this.refreshTransactions$.pipe(switchMap(() => getTransactions())),
-            this.paginationChange$.pipe(switchMap(() => getTransactions()))
+            this.queryChange$.pipe(switchMap(() => getTransactions()))
         ).pipe(
             shareReplay(1)
         );
@@ -68,9 +75,16 @@ export class TransactionsListPageComponent implements OnInit {
             map(response => ({
                 totalPages: response.totalPages,
                 totalItems: response.totalTransactionsCount,
-                pageSize: this.paginationChange$.value.pageSize,
-                pageNumber: this.paginationChange$.value.pageNumber
+                pageSize: this.queryChange$.value.pageSize,
+                pageNumber: this.queryChange$.value.pageNumber
             }))
+        );
+
+        this.searchResultSummary$ = transactionsResponse$.pipe(
+            map(response => this.queryChange$.value.searchTerm
+                ? `${response.totalTransactionsCount} results for "<b>${this.queryChange$.value.searchTerm}</b>"`
+                : null
+            )
         );
 
         this.transactionCategories$ = this.transactionService.getCategories().pipe(
@@ -83,7 +97,17 @@ export class TransactionsListPageComponent implements OnInit {
     }
 
     onPaginationChange(settings: PaginationSettings) {
-        this.paginationChange$.next(settings);
+        this.queryChange$.next({
+            ...this.queryChange$.value,
+            ...settings
+        });
+    }
+
+    onDateSortChange(dateSortDirection: SortDirection) {
+        this.queryChange$.next({
+            ...this.queryChange$.value,
+            dateSortDirection
+        });
     }
 
     onCategorise(categorisation: TransactionCategorisation) {
@@ -100,6 +124,13 @@ export class TransactionsListPageComponent implements OnInit {
                 this.refreshTransactions$.next();
             });
         }
+    }
+
+    onTextSearch(text: string) {
+        this.queryChange$.next({
+            ...this.queryChange$.value,
+            searchTerm: text
+        });
     }
 
     private mapTransactions(transations: Transaction[]): TransactionTableRow[] {

@@ -21,9 +21,9 @@ namespace Augustus.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPaged([FromQuery] TransactionPaginationRequest pagination, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetList([FromQuery] TransactionQueryRequest request, CancellationToken cancellationToken)
         {
-            return Ok(await _transactionsService.GetTransactions(pagination, cancellationToken));
+            return Ok(await _transactionsService.GetTransactions(request, cancellationToken));
         }
 
         [HttpGet("{id:int}")]

@@ -24,28 +24,48 @@ namespace Augustus.Api.Services
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<TransactionPaginationResponse> GetTransactions(TransactionPaginationRequest pagination, CancellationToken cancellationToken)
+        public async Task<TransactionQueryResponse> GetTransactions(TransactionQueryRequest request, CancellationToken cancellationToken)
         {
-            int pageNumber = pagination.PageNumber ?? 1;
-            int pageSize = pagination.PageSize ?? 100;
+            int pageNumber = request.PageNumber ?? 1;
+            int pageSize = request.PageSize ?? 100;
 
             int skipCount = (pageNumber - 1) * pageSize;
 
-            List<Transaction> transactions = await _context.Transactions
+            IQueryable<Transaction> query = _context.Transactions
+                .AsNoTracking()
                 .Include(x => x.Category)
                 .Include(x => x.SubCategory)
-                .OrderBy(x => x.Date)
+                .OrderBy(x => x.Date);
+
+            if (request.SearchTerm != null)
+            {
+                query = query.Where(x => EF.Functions.Like(x.Description, $"%{request.SearchTerm}%"));
+            }
+
+            // Count query to get total number of transactions in search
+            int totalTransactionsCount = await query.CountAsync(cancellationToken);
+
+            // Apply ordering by date if applicable
+            if (request.DateSortDirection == SortDirection.Ascending)
+            {
+                query = query.OrderBy(x => x.Date);
+            }
+            else if (request.DateSortDirection == SortDirection.Descending)
+            {
+                query = query.OrderByDescending(x => x.Date);
+            }
+
+            // Paged query to return the transactions
+            var pagedTransactions = await query
                 .Skip(skipCount)
                 .Take(pageSize)
-                .AsNoTracking()
                 .ToListAsync(cancellationToken);
 
-            int totalTransactionsCount = await _context.Transactions.CountAsync(cancellationToken);
             int totalPages = (int) Math.Ceiling((double) totalTransactionsCount / pageSize);
 
-            return new TransactionPaginationResponse
+            return new TransactionQueryResponse
             {
-                Transactions = transactions,
+                Transactions = pagedTransactions,
                 TotalTransactionsCount = totalTransactionsCount,
                 TotalPages = totalPages
             };

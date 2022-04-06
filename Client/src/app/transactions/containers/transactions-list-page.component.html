@@ -1,69 +1,64 @@
 <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
 
 <div class="content-container">
-    <ng-container>
-        <div class="golden-ratio-container">
-            <div class="golden-ratio-large">
-                <mat-card>
-                    <mat-card-title class="flex">
-                        <h2>Transactions</h2>
-                        <div class="flex-spacer"></div>
-                    </mat-card-title>
+    <mat-card>
+        <mat-card-title class="flex">
+            <h2>Transactions</h2>
+            <div class="flex-spacer"></div>
+        </mat-card-title>
 
-                    <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
 
-                    <mat-card-content>
-                        <aug-transactions-table
-                            *ngIf="(transactionRows$ | async) as transactions; else loading"
-                            [transactions]="transactions"
-                            (transactionSelectionChange)="onTransactionSelectionChange($event)"
-                            [pagination]="pagination$ | async"
-                            (paginationChange)="onPaginationChange($event)">
-                        </aug-transactions-table>
+        <mat-card-content>
+            <aug-transactions-search-form [resultsSummary]="searchResultSummary$ | async" (textSearch)="onTextSearch($event)"></aug-transactions-search-form>
 
-                        <div *ngIf="!transactionsFirstLoad && isLoading" class="aug-mat-card-overlay">
-                            <mat-spinner [diameter]="30"></mat-spinner>
-                        </div>
-                    </mat-card-content>
+            <mat-divider></mat-divider>
 
-                    <!-- <div *ngIf="!transactionsFirstLoad && transactionsLoading" class="aug-mat-card-overlay">
-                        <mat-spinner [diameter]="30"></mat-spinner>
-                    </div> -->
-                </mat-card>
+            <aug-transactions-table
+                *ngIf="(transactionRows$ | async) as transactions"
+                [transactions]="transactions"
+                [pagination]="pagination$ | async"
+                (transactionSelectionChange)="onTransactionSelectionChange($event)"
+                (paginationChange)="onPaginationChange($event)"
+                (dateSortChange)="onDateSortChange($event)">
+            </aug-transactions-table>
+
+            <div *ngIf="isLoading" class="aug-mat-card-overlay">
+                <mat-spinner [diameter]="30"></mat-spinner>
             </div>
+        </mat-card-content>
 
-            <div class="golden-ratio-small">
-                <mat-card>
-                    <mat-card-title>
-                        <h2>Categorise Transactions</h2>
-                    </mat-card-title>
+        <!-- <div *ngIf="!transactionsFirstLoad && transactionsLoading" class="aug-mat-card-overlay">
+            <mat-spinner [diameter]="30"></mat-spinner>
+        </div> -->
+    </mat-card>
 
-                    <mat-divider></mat-divider>
+    <mat-card>
+        <mat-card-title>
+            <h2>Categorise Transactions</h2>
+        </mat-card-title>
 
-                    <mat-card-content>
-                        <ng-container *ngIf="(transactionCategories$ | async) as transactionCategories; else loading">
-                            <aug-transactions-categorisation-form
-                                *ngIf="selectedTransactions.length; else noTransactionsSelected"
-                                [transactions]="selectedTransactions"
-                                [categories]="transactionCategories"
-                                [categoriseEnabled]="!isLoading"
-                                (categorise)="onCategorise($event)">
-                            </aug-transactions-categorisation-form>
-                        </ng-container>
+        <mat-divider></mat-divider>
 
-                        <div *ngIf="categorising" class="aug-mat-card-overlay">
-                            <mat-spinner [diameter]="30"></mat-spinner>
-                        </div>
-                    </mat-card-content>
-                </mat-card>
+        <mat-card-content>
+            <ng-container *ngIf="(transactionCategories$ | async) as transactionCategories">
+                <aug-transactions-categorisation-form
+                    *ngIf="selectedTransactions.length"
+                    [transactions]="selectedTransactions"
+                    [categories]="transactionCategories"
+                    [categoriseEnabled]="!isLoading"
+                    (categorise)="onCategorise($event)">
+                </aug-transactions-categorisation-form>
+
+                <p *ngIf="!isLoading && selectedTransactions.length === 0" class="aug-mat-card-placeholder">Select transactions to categorise</p>
+            </ng-container>
+
+            <div *ngIf="isLoading" class="aug-mat-card-overlay">
+                <mat-spinner [diameter]="30"></mat-spinner>
             </div>
-        </div>
-    </ng-container>
+        </mat-card-content>
+    </mat-card>
 </div>
-
-<ng-template #noTransactionsSelected>
-    <p class="aug-mat-card-placeholder">Select transactions to categorise</p>
-</ng-template>
 
 <ng-template #loading>
     <aug-card-loading-spinner></aug-card-loading-spinner>

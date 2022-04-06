@@ -1,6 +1,11 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
     <mat-form-field appearance="standard">
+        <mat-label>Description</mat-label>
+        <input matInput type="text" />
+    </mat-form-field>
+
+    <mat-form-field appearance="standard">
         <mat-label>Category</mat-label>
         <mat-select formControlName="category">
             <mat-option *ngFor="let category of categories" [value]="category.id">
@@ -8,7 +13,7 @@
             </mat-option>
         </mat-select>
         <mat-error *ngIf="form.controls.category.hasError('required')">
-            Email is <strong>required</strong>
+            Category is <strong>required</strong>
         </mat-error>
     </mat-form-field>
 

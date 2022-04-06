@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
+import { Sort, SortDirection } from '@angular/material/sort';
 
 import { combineLatest, Subject } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
@@ -26,9 +27,9 @@ export interface TransactionTableRow {
     styleUrls: ['./transactions-table.component.scss']
 })
 export class TransactionsTableComponent implements OnChanges, OnDestroy {
-    private destroy$ = new Subject();
+    private readonly destroy$ = new Subject();
 
-    columns = ['selected', 'description', 'creditAmount', 'debitAmount', 'category'];
+    columns = ['selected', 'date', 'description', 'category', 'creditAmount', 'debitAmount'];
 
     form: FormGroup;
 
@@ -37,6 +38,7 @@ export class TransactionsTableComponent implements OnChanges, OnDestroy {
 
     @Output() transactionSelectionChange = new EventEmitter<Id<Transaction>[]>();
     @Output() paginationChange = new EventEmitter<PaginationSettings>();
+    @Output() dateSortChange = new EventEmitter<SortDirection>();
 
     get transactionsControl(): FormArray {
         return this.form && this.form.controls.transactions as FormArray;
@@ -71,6 +73,12 @@ export class TransactionsTableComponent implements OnChanges, OnDestroy {
 
     onPaginatorChange(event: PageEvent) {
         this.paginationChange.emit({ pageNumber: event.pageIndex + 1, pageSize: event.pageSize });
+    }
+
+    onSortChange(sort: Sort) {
+        if (sort.active === 'date') {
+            this.dateSortChange.emit(sort.direction);
+        }
     }
 
     private buildForm() {

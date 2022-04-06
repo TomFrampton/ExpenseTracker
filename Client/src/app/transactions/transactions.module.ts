@@ -18,6 +18,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatInputModule } from '@angular/material/input';
+import { MatSortModule } from '@angular/material/sort';
 
 import { AugustusCommonModule } from '@aug/common/common.module';
 
@@ -33,6 +35,7 @@ import {
 import {
     TransactionDetailFormComponent,
     TransactionsCategorisationFormComponent,
+    TransactionsSearchFormComponent,
     TransactionsTableComponent,
     TransactionsUploadFormComponent
 } from './components';
@@ -67,6 +70,8 @@ const routes: Routes = [
         MatProgressSpinnerModule,
         MatSnackBarModule,
         MatPaginatorModule,
+        MatInputModule,
+        MatSortModule,
 
         AugustusCommonModule
     ],
@@ -82,6 +87,7 @@ const routes: Routes = [
         TransactionsTableComponent,
         TransactionDetailFormComponent,
         TransactionsCategorisationFormComponent,
+        TransactionsSearchFormComponent,
         TransactionsUploadFormComponent
     ],
 

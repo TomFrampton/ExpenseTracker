@@ -2,7 +2,7 @@
 
 namespace Augustus.Api.Models.Transactions
 {
-    public class TransactionPaginationResponse
+    public class TransactionQueryResponse
     {
         public IEnumerable<Transaction> Transactions { get; set; }
         public int TotalTransactionsCount { get; set; }

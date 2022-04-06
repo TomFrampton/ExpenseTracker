@@ -1,0 +1,15 @@
+<div class="content-container flex half-pad-top no-pad-bottom">
+    <div class="flex-column flex-grow">
+        <form class="flex flex-end" [formGroup]="form" (ngSubmit)="onTextSearchSubmit($event)">
+            <mat-form-field appearance="standard">
+                <mat-label>Search</mat-label>
+                <input matInput type="text" formControlName="textSearch" />
+                <mat-icon matSuffix (click)="onTextSearchSubmit($event)">search</mat-icon>
+            </mat-form-field>
+        </form>
+        <div *ngIf="resultsSummary" class="aug-results-summary">
+            <p [innerHtml]="resultsSummary"></p>
+            <button mat-button (click)="onClearSearchResultsClick()">Clear search results</button>
+        </div>
+    </div>
+</div>

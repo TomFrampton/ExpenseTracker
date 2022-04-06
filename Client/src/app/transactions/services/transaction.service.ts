@@ -3,21 +3,25 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { Transaction, TransactionCategorisationRequest, TransactionCategory, TransactionPaginationResponse } from '../models';
+import { Transaction, TransactionCategorisationRequest, TransactionCategory, TransactionQueryResponse } from '../models';
 import { delay } from 'rxjs/operators';
+
+import { TransactionQueryParams } from '../containers';
 
 
 @Injectable()
 export class TransactionService {
     constructor(private httpClient: HttpClient) {}
 
-    getPaged(pageSize: number, pageNumber = 1) {
+    getList(queryParams: TransactionQueryParams = {}) {
         const params = {
-            pageSize: pageSize.toString(),
-            pageNumber: pageNumber.toString()
+            pageSize: queryParams.pageSize.toString(),
+            pageNumber: queryParams.pageNumber.toString(),
+            searchTerm: queryParams.searchTerm || '',
+            dateSortDirection: queryParams.dateSortDirection || ''
         };
 
-        return this.httpClient.get<TransactionPaginationResponse>('./transactions', { params });
+        return this.httpClient.get<TransactionQueryResponse>('./transactions', { params }).pipe(delay(1000));
     }
 
     getById(transactionId: number): Observable<Transaction> {

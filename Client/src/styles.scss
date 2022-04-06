@@ -34,8 +34,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .flex { display: flex; }
 .flex-column { flex-direction: column; }
-
+.flex-grow { flex-grow: 1; }
 .space-between { justify-content: space-between; }
+
+.flex-start { justify-content: flex-start; }
+.flex-end { justify-content: flex-end; }
 
 .full-width { width: 100%; }
 
@@ -58,6 +61,22 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .pad-left {
     padding-left: 16px;
+}
+
+.margin-right {
+    margin-right: 16px !important;
+}
+
+.margin-left {
+    margin-left: 16px;
+}
+
+.half-pad-top {
+    padding-top: 8px;
+}
+
+.no-pad-bottom {
+    padding-bottom: 0;
 }
 
 .golden-ratio-container {
@@ -97,6 +116,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-card-content {
     margin-bottom: 0 !important;
     position: relative;
+    min-height: 180px;
 }
 
 .mat-divider {

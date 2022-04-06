@@ -5,3 +5,9 @@
 mat-paginator {
     margin-bottom: -12px;
 }
+
+.mat-column-creditAmount,
+.mat-column-debitAmount {
+    width: 150px;
+    text-align: right;
+}

@@ -1,0 +1,13 @@
+mat-form-field {
+    width: 300px;
+
+    mat-icon {
+        cursor: pointer;
+    }
+}
+
+.aug-results-summary {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}

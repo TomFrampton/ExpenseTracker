@@ -7,6 +7,22 @@
 .content-container {
     padding: 16px;
     flex-grow: 1;
+    display: flex;
+}
+
+mat-card {
+    height: fit-content;
+
+    // Transactions table
+    &:first-child {
+        margin-right: 16px;
+        flex-grow: 1;
+    }
+
+    // Categorisation form
+    &:last-child {
+        width: 500px;
+    }
 }
 
 mat-card-content {
