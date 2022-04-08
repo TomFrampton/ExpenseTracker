@@ -19,6 +19,7 @@ export interface TransactionTableRow {
     debitAmount: number;
     date: Date;
     category: string;
+    userSuppliedDescription: string;
 }
 
 @Component({

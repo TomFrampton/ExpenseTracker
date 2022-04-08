@@ -10,6 +10,10 @@ namespace Augustus.Api.Infrastructure.Configuration
         {
             builder.HasKey(x => x.Id);
 
+            builder.Property(x => x.UserSuppliedDescription)
+                .HasMaxLength(255)
+                .IsRequired(false);
+
             builder
                 .HasOne(x => x.Category)
                 .WithMany()

@@ -140,7 +140,8 @@ export class TransactionsListPageComponent implements OnInit {
             date: t.date,
             creditAmount: t.creditAmount,
             debitAmount: t.debitAmount,
-            category: t.category ? (t.subCategory ? `${t.category.name} - ${t.subCategory.name}` : t.category.name) : '-'
+            category: t.category ? (t.subCategory ? `${t.category.name} - ${t.subCategory.name}` : t.category.name) : '-',
+            userSuppliedDescription: t.userSuppliedDescription
         }))
     }
 }

@@ -48,13 +48,15 @@ export class TransactionsCategorisationFormComponent implements OnInit, OnChange
         if (this.form.valid) {
             this.categorise.emit({
                 categoryId: this.form.value.category,
-                subCategoryId: this.form.value.subCategory
+                subCategoryId: this.form.value.subCategory,
+                description: this.form.value.description
             });
         }
     }
 
     private buildForm() {
         this.form = this.formBuilder.group({
+            description: [null, Validators.required],
             category: [null, Validators.required],
             subCategory: [null]
         });

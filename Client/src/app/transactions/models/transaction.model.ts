@@ -9,4 +9,5 @@ export interface Transaction {
 
     category: TransactionCategory;
     subCategory: TransactionCategory;
+    userSuppliedDescription: string;
 }

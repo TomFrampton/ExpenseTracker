@@ -39,7 +39,9 @@ namespace Augustus.Api.Services
 
             if (request.SearchTerm != null)
             {
-                query = query.Where(x => EF.Functions.Like(x.Description, $"%{request.SearchTerm}%"));
+                query = query.Where(x =>
+                    EF.Functions.Like(x.Description, $"%{request.SearchTerm}%") ||
+                    EF.Functions.Like(x.UserSuppliedDescription, $"%{request.SearchTerm}%"));
             }
 
             // Count query to get total number of transactions in search
@@ -104,6 +106,7 @@ namespace Augustus.Api.Services
             {
                 transaction.CategoryId = model.CategoryId;
                 transaction.SubCategoryId = model.SubCategoryId;
+                transaction.UserSuppliedDescription = model.Description;
             }
 
             await _context.SaveChangesAsync();
