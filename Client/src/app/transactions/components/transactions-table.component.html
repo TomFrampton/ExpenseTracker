@@ -43,10 +43,8 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="columns"></tr>
-        <tr mat-row *matRowDef="let rowData; columns: columns"></tr>
+        <tr mat-row *matRowDef="let transaction; columns: columns" [class.aug-categorised-row]="transaction.isCategorised" [class.aug-uncategorised-row]="!transaction.isCategorised"></tr>
     </table>
-
-
 </form>
 
 <mat-paginator

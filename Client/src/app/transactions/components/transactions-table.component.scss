@@ -17,3 +17,27 @@ mat-paginator {
     line-height: 10px;
     color: rgba(0,0,0,0.5);
 }
+
+.aug-categorised-row {
+    // TODO Use themes
+    //background-color: rgba(139, 204, 47, 0.05);
+
+    td {
+        &.mat-column-description {
+            color: #3f8528;
+            font-weight: 500;
+        }
+    }
+}
+
+.aug-uncategorised-row {
+    // TODO Use themes
+    background-color: rgba(192, 57, 43, 0.05);
+
+    td {
+        &.mat-column-description {
+            color: #c0392b;
+            font-weight: 500;
+        }
+    }
+}

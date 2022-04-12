@@ -20,6 +20,7 @@ export interface TransactionTableRow {
     date: Date;
     category: string;
     userSuppliedDescription: string;
+    isCategorised: boolean;
 }
 
 @Component({
@@ -87,10 +88,7 @@ export class TransactionsTableComponent implements OnChanges, OnDestroy {
             allSelected: [false],
             transactions: this.formBuilder.array(
                 this.transactions.map(t => this.formBuilder.group({
-                    id: [{
-                        value: t.id,
-                        disabled: true
-                    }],
+                    id: [{ value: t.id, disabled: true }],
                     selected: [false]
                 }))
             )

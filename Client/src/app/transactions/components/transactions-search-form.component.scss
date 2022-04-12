@@ -11,3 +11,13 @@ mat-form-field {
     align-items: baseline;
     justify-content: space-between;
 }
+
+mat-button-toggle-group {
+    border-bottom: 0;
+    border-left: 0;
+    border-radius: 0 4px 0 0;
+
+    mat-button-toggle {
+        min-width: 72px;
+    }
+}

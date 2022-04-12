@@ -1,6 +1,15 @@
 <div class="content-container flex half-pad-top no-pad-bottom">
     <div class="flex-column flex-grow">
-        <form class="flex flex-end" [formGroup]="form" (ngSubmit)="onTextSearchSubmit($event)">
+        <form class="flex flex-space-between" [formGroup]="form" (ngSubmit)="onTextSearchSubmit($event)">
+            <mat-form-field appearance="standard">
+                <mat-select formControlName="year">
+                    <mat-optgroup *ngIf="years && years.length" label="Year">
+                        <mat-option *ngFor="let year of years" [value]="year">{{year}}</mat-option>
+                    </mat-optgroup>
+                    <mat-option [value]="allTimePeriodsCode">All time periods</mat-option>
+                </mat-select>
+            </mat-form-field>
+
             <mat-form-field appearance="standard">
                 <mat-label>Search</mat-label>
                 <input matInput type="text" formControlName="textSearch" />
@@ -13,3 +22,7 @@
         </div>
     </div>
 </div>
+
+<mat-button-toggle-group [value]="selectedTypeValue" (change)="onTypeChange($event)">
+    <mat-button-toggle *ngFor="let type of transactionTypes" [value]="type.code">{{type.label}}</mat-button-toggle>
+</mat-button-toggle-group>

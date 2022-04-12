@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { SortDirection } from '@angular/material/sort';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
 import { tap, map, switchMap, shareReplay } from 'rxjs/operators';
@@ -9,13 +11,15 @@ import { PaginationSettings, PaginationSummary } from '@aug/common/pagination';
 import { TransactionService } from '../services';
 import { TransactionTableRow } from '../components';
 import { Transaction, TransactionCategorisation, TransactionCategory } from '../models';
-import { SortDirection } from '@angular/material/sort';
+import { TransactionType } from '../enums';
 
 export interface TransactionQueryParams {
     pageSize?: number;
     pageNumber?: number;
     searchTerm?: string;
     dateSortDirection?: string;
+    type?: string;
+    year?: number;
 }
 
 @Component({
@@ -24,12 +28,13 @@ export interface TransactionQueryParams {
 })
 export class TransactionsListPageComponent implements OnInit {
     private readonly refreshTransactions$ = new Subject<void>();
-    private readonly queryChange$ = new BehaviorSubject<TransactionQueryParams>({ pageSize: 5, pageNumber: 1, searchTerm: null, dateSortDirection: null });
+    private readonly queryChange$ = new BehaviorSubject<TransactionQueryParams>({ pageSize: 5, pageNumber: 1, searchTerm: null, dateSortDirection: null, type: TransactionType.uncategorised.code });
 
     transactionRows$: Observable<TransactionTableRow[]>;
     transactionCategories$: Observable<TransactionCategory[]>;
     searchResultSummary$: Observable<string>;
     pagination$: Observable<PaginationSummary>;
+    years$: Observable<number[]>;
 
     transactions: Transaction[];
     selectedTransactions: Transaction[] = [];
@@ -37,17 +42,26 @@ export class TransactionsListPageComponent implements OnInit {
     transactionsFirstLoad = true;
     transactionsLoading = true;
     transactionCategoriesLoading = true;
+    transactionYearsLoading = true;
     categorising = false;
 
-    get isLoading () {
-        return this.transactionsLoading || this.transactionCategoriesLoading || this.categorising;
+    get isLoading() {
+        return this.transactionsLoading || this.transactionCategoriesLoading || this.categorising || this.transactionYearsLoading;
     }
 
     get selectedTransactionIds(): number[] {
         return this.selectedTransactions?.map(x => x.id) || [];
     }
 
-    constructor(private transactionService: TransactionService) {}
+    get selectedType() {
+        return TransactionType.fromCode(this.queryChange$.value.type);
+    }
+
+    get selectedYear() {
+        return this.queryChange$.value.year || null;
+    }
+
+    constructor(private transactionService: TransactionService, private snackBar: MatSnackBar) {}
 
     ngOnInit() {
         const getTransactions = () => {
@@ -90,6 +104,22 @@ export class TransactionsListPageComponent implements OnInit {
         this.transactionCategories$ = this.transactionService.getCategories().pipe(
             tap(() => this.transactionCategoriesLoading = false)
         );
+
+        this.years$ = this.transactionService.getEarliestYear().pipe(
+            map(earliestYear => {
+                const years = [];
+                const currentYear = new Date().getFullYear();
+
+                if (earliestYear) {
+                    for (let y = earliestYear; y <= currentYear; y++) {
+                        years.push(y);
+                    }
+                }
+
+                return years;
+            }),
+            tap(() => this.transactionYearsLoading = false)
+        );
     }
 
     onTransactionSelectionChange(ids: Id<Transaction>[]) {
@@ -110,6 +140,27 @@ export class TransactionsListPageComponent implements OnInit {
         });
     }
 
+    onTextSearch(text: string) {
+        this.queryChange$.next({
+            ...this.queryChange$.value,
+            searchTerm: text
+        });
+    }
+
+    onTransactionTypeChange(type: TransactionType) {
+        this.queryChange$.next({
+            ...this.queryChange$.value,
+            type: type?.code
+        });
+    }
+
+    onYearChange(year: number) {
+        this.queryChange$.next({
+            ...this.queryChange$.value,
+            year
+        })
+    }
+
     onCategorise(categorisation: TransactionCategorisation) {
         if (!this.isLoading) {
             const request = {
@@ -121,16 +172,11 @@ export class TransactionsListPageComponent implements OnInit {
 
             this.transactionService.categorise(request).subscribe(result => {
                 this.categorising = false;
+                const transactionsCount = request.transactionIds.length;
+                this.snackBar.open(`${transactionsCount} transaction${transactionsCount !== 1 ? 's' : ''} categorised`, null, { duration: 2000 });
                 this.refreshTransactions$.next();
             });
         }
-    }
-
-    onTextSearch(text: string) {
-        this.queryChange$.next({
-            ...this.queryChange$.value,
-            searchTerm: text
-        });
     }
 
     private mapTransactions(transations: Transaction[]): TransactionTableRow[] {
@@ -141,7 +187,8 @@ export class TransactionsListPageComponent implements OnInit {
             creditAmount: t.creditAmount,
             debitAmount: t.debitAmount,
             category: t.category ? (t.subCategory ? `${t.category.name} - ${t.subCategory.name}` : t.category.name) : '-',
-            userSuppliedDescription: t.userSuppliedDescription
+            userSuppliedDescription: t.userSuppliedDescription,
+            isCategorised: t.isCategorised
         }))
     }
 }

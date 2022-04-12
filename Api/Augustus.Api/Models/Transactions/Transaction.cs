@@ -21,6 +21,8 @@ namespace Augustus.Api.Models.Transactions
         /// </summary>
         public string UserSuppliedDescription { get; set; }
 
+        public bool IsCategorised => CategoryId.HasValue;
+
         public TransactionCategory Category { get; set; }
         public TransactionCategory SubCategory { get; set; }
     }

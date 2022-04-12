@@ -45,6 +45,12 @@ namespace Augustus.Api.Controllers
             return Ok(await _transactionsService.GetTransactionCategories());
         }
 
+        [HttpGet("earliest-year")]
+        public async Task<IActionResult> GetEarliestYear()
+        {
+            return Ok(await _transactionsService.GetTransactionEarliestYear());
+        }
+
 
         [HttpPost("categorise")]
         public async Task<IActionResult> Categorise([FromBody] TransactionCategorisationRequest model)

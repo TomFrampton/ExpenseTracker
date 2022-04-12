@@ -14,14 +14,9 @@ export class TransactionService {
     constructor(private httpClient: HttpClient) {}
 
     getList(queryParams: TransactionQueryParams = {}) {
-        const params = {
-            pageSize: queryParams.pageSize.toString(),
-            pageNumber: queryParams.pageNumber.toString(),
-            searchTerm: queryParams.searchTerm || '',
-            dateSortDirection: queryParams.dateSortDirection || ''
-        };
+        const params = this.buildQueryParams(queryParams);
 
-        return this.httpClient.get<TransactionQueryResponse>('./transactions', { params }).pipe(delay(1000));
+        return this.httpClient.get<TransactionQueryResponse>('./transactions', { params }).pipe(delay(500));
     }
 
     getById(transactionId: number): Observable<Transaction> {
@@ -30,6 +25,10 @@ export class TransactionService {
 
     getCategories(): Observable<TransactionCategory[]> {
         return this.httpClient.get<TransactionCategory[]>('./transactions/categories');
+    }
+
+    getEarliestYear(): Observable<number> {
+        return this.httpClient.get<number>('./transactions/earliest-year');
     }
 
     categorise(request: TransactionCategorisationRequest): Observable<any> {
@@ -42,5 +41,17 @@ export class TransactionService {
 
         return this.httpClient.post('./transactions/upload', formData);
 
+    }
+
+    private buildQueryParams(params: any) {
+        return Object.keys(params).reduce((result, key) => {
+            const value = params[key];
+
+            if (value !== null && value !== undefined && value !== '') {
+                return { ...result, [key]: value.toString() }
+            }
+
+            return result;
+        }, {});
     }
 }

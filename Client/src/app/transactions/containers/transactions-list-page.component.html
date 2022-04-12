@@ -10,7 +10,15 @@
         <mat-divider></mat-divider>
 
         <mat-card-content>
-            <aug-transactions-search-form [resultsSummary]="searchResultSummary$ | async" (textSearch)="onTextSearch($event)"></aug-transactions-search-form>
+            <aug-transactions-search-form
+                [selectedType]="selectedType"
+                [selectedYear]="selectedYear"
+                [resultsSummary]="searchResultSummary$ | async"
+                [years]="years$ | async"
+                (textSearch)="onTextSearch($event)"
+                (typeChange)="onTransactionTypeChange($event)"
+                (yearChange)="onYearChange($event)">
+            </aug-transactions-search-form>
 
             <mat-divider></mat-divider>
 

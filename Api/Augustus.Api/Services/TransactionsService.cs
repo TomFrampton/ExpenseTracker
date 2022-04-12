@@ -44,6 +44,21 @@ namespace Augustus.Api.Services
                     EF.Functions.Like(x.UserSuppliedDescription, $"%{request.SearchTerm}%"));
             }
 
+            if (request.Type == TransactionType.Uncategorised)
+            {
+                query = query.Where(x => x.CategoryId == null);
+            }
+            else if (request.Type == TransactionType.Categorised)
+            {
+                query = query.Where(x => x.CategoryId != null);
+            }
+
+            if (request.Year.HasValue)
+            {
+                var yearStart = new DateTime(request.Year.Value, 1, 1);
+                query = query.Where(x => x.Date >= yearStart && x.Date < yearStart.AddYears(1));
+            }
+
             // Count query to get total number of transactions in search
             int totalTransactionsCount = await query.CountAsync(cancellationToken);
 
@@ -85,6 +100,16 @@ namespace Augustus.Api.Services
                 .AsNoTracking()
                 .Where(x => x.ParentId == null)
                 .ToListAsync();
+        }
+
+        public async Task<int?> GetTransactionEarliestYear()
+        {
+            var earliestDate = await _context.Transactions
+                .OrderBy(x => x.Date)
+                .Select(x => x.Date as DateTime?)
+                .FirstOrDefaultAsync();
+
+            return earliestDate?.Year;
         }
 
         public async Task CategoriseTransactions(TransactionCategorisationRequest model)

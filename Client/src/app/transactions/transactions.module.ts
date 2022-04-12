@@ -20,6 +20,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatSortModule } from '@angular/material/sort';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 import { AugustusCommonModule } from '@aug/common/common.module';
 
@@ -72,6 +73,7 @@ const routes: Routes = [
         MatPaginatorModule,
         MatInputModule,
         MatSortModule,
+        MatButtonToggleModule,
 
         AugustusCommonModule
     ],
