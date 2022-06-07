@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { Transaction, TransactionCategorisationRequest, TransactionCategory, TransactionQueryResponse } from '../models';
+import { Transaction, TransactionCategorisationRequest, TransactionCategorisationSummaryResponse, TransactionCategory, TransactionPeriodCategoryTotalsResponse, TransactionQueryResponse } from '../models';
 import { delay } from 'rxjs/operators';
 
 import { TransactionQueryParams } from '../containers';
@@ -29,6 +29,14 @@ export class TransactionService {
 
     getEarliestYear(): Observable<number> {
         return this.httpClient.get<number>('./transactions/earliest-year');
+    }
+
+    getCategorisationSummary() : Observable<TransactionCategorisationSummaryResponse> {
+        return this.httpClient.get<TransactionCategorisationSummaryResponse>('./transactions/categorisation-summary');
+    }
+
+    getMonthlyCategoryTotals(): Observable<TransactionPeriodCategoryTotalsResponse[]> {
+        return this.httpClient.get<TransactionPeriodCategoryTotalsResponse[]>('./transactions/monthly-category-totals').pipe(delay(500));
     }
 
     categorise(request: TransactionCategorisationRequest): Observable<any> {

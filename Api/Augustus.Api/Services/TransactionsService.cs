@@ -1,7 +1,10 @@
 ﻿using Augustus.Api.Application.Transactions;
+using Augustus.Api.Extensions;
 using Augustus.Api.Infrastructure;
 using Augustus.Api.Models;
 using Augustus.Api.Models.Transactions;
+using Augustus.Api.Queries;
+using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,7 +12,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using static Augustus.Api.Controllers.TransactionsController;
 
 namespace Augustus.Api.Services
 {
@@ -112,6 +114,42 @@ namespace Augustus.Api.Services
             return earliestDate?.Year;
         }
 
+        public async Task<TransactionCategorisationSummaryResponse> GetTransactionCategorisationSummary()
+        {
+            var uncategorisedCount = await _context.Transactions.CountAsync(t => t.CategoryId == null);
+            var totalCount = await _context.Transactions.CountAsync();
+
+            return new TransactionCategorisationSummaryResponse
+            {
+                UncategorisedCount = uncategorisedCount,
+                TotalCount = totalCount
+            };
+        }
+
+        public async Task<IEnumerable<TransactionPeriodCategoryTotalsResponse>> GetMonthlyTransactionCategoryTotals()
+        {
+            // Don't use a using statement here as we don't want to dispose of the connection manually
+            var connection = _context.Database.GetDbConnection();
+            var result = await connection.QueryAsync<TransactionsByCategoryAndMonth>(TransactionsByCategoryAndMonth.Sql);
+
+            var response = result
+                .GroupBy(x => x.Date)
+                .OrderBy(x => x.Key)
+                .SelectList(x => new TransactionPeriodCategoryTotalsResponse
+                {
+                    PeriodStartMonth = x.Key.Month,
+                    PeriodStartYear = x.Key.Year,
+                    PeriodStart = x.Key,
+                    CategoryTotals = x.SelectList(y => new TransactionPeriodCategoryTotalsResponse.CategoryTotal
+                    {
+                        CategoryId = y.CategoryId,
+                        TotalAmount = y.TotalAmount
+                    })
+                });
+
+            return response;
+        }
+
         public async Task CategoriseTransactions(TransactionCategorisationRequest model)
         {
             var category = await _context.TransactionCategories
@@ -171,7 +209,7 @@ namespace Augustus.Api.Services
             .OrderByDescending(x => x.Excel.OrderId)
             .ToList();
 
-            // TODO  - Add balance possibly to improve duplicate detection
+            // TODO  - Add 'balance' field possibly to improve duplicate detection
 
             List<Transaction> transactionsToAdd = leftJoin
                 .Where(pair => pair.Entity == null)

@@ -6,8 +6,10 @@ import { RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
 
-// Augutus
+// Augustus
 import { NavbarComponent } from './navbar/navbar.component';
 import { CardLoadingSpinnerComponent } from './loading-spinner/card-loading-spinner.component';
 
@@ -19,12 +21,20 @@ import { CardLoadingSpinnerComponent } from './loading-spinner/card-loading-spin
         // Material
         MatToolbarModule,
         MatButtonModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatCardModule,
+        MatDividerModule
     ],
 
     exports: [
-        CardLoadingSpinnerComponent,
-        NavbarComponent
+        // Material
+        MatCardModule,
+        MatDividerModule,
+        MatButtonModule,
+        MatProgressSpinnerModule,
+
+        NavbarComponent,
+        CardLoadingSpinnerComponent
     ],
 
     declarations: [

@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { BaseUrlHttpInterceptor } from './interceptors/base-url-http-interceptor';
 import { BrowserModule } from '@angular/platform-browser';
+
+import { BaseUrlHttpInterceptor, DateHttpInterceptor } from './interceptors';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { BrowserModule } from '@angular/platform-browser';
         HttpClientModule
     ],
     providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: BaseUrlHttpInterceptor, multi: true }
+        { provide: HTTP_INTERCEPTORS, useClass: BaseUrlHttpInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: DateHttpInterceptor, multi: true }
     ]
 })
 export class CoreModule {}

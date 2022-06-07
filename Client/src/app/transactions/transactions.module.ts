@@ -4,10 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 
 // Angular Material
-import { MatCardModule } from '@angular/material/card';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
-import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,7 +12,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
@@ -57,10 +53,7 @@ const routes: Routes = [
         CommonModule,
         ReactiveFormsModule,
 
-        MatCardModule,
-        MatDividerModule,
         MatTableModule,
-        MatButtonModule,
         MatCheckboxModule,
         MatSelectModule,
         MatFormFieldModule,
@@ -68,7 +61,6 @@ const routes: Routes = [
         MatSidenavModule,
         MatListModule,
         MatIconModule,
-        MatProgressSpinnerModule,
         MatSnackBarModule,
         MatPaginatorModule,
         MatInputModule,
@@ -82,8 +74,8 @@ const routes: Routes = [
         // Containers
         TransactionsPageComponent,
         TransactionsListPageComponent,
-        TransactionsCategoriesPageComponent,
         TransactionsUploadPageComponent,
+        TransactionsCategoriesPageComponent,
 
         // Components
         TransactionsTableComponent,

@@ -1,0 +1,26 @@
+<div class="content-container">
+    <h2>Dashboard</h2>
+
+    <ng-container *ngIf="(categorisationSummary$ | async) as summary">
+        <mat-card class="margin-bottom flex flex-space-between" *ngIf="summary.uncategorisedCount > 0">
+            <span class="flex-align-self-center">Analysis is imcomplete due to {{summary.uncategorisedCount}} transactions being uncategorised.</span>
+            <a mat-button routerLink="../transactions">Complete transaction categorisation</a>
+        </mat-card>
+    </ng-container>
+
+    <mat-card>
+        <mat-card-title>
+            <h2>Monthly Expenditure Overview</h2>
+        </mat-card-title>
+
+        <mat-divider></mat-divider>
+
+        <mat-card-content class="double-pad-top">
+            <aug-dashboard-expenditure-line-chart [data]="monthlyExpenditureData$ | async"></aug-dashboard-expenditure-line-chart>
+
+            <div *ngIf="monthlyExpenditureDataLoading" class="aug-mat-card-overlay">
+                <mat-spinner [diameter]="30"></mat-spinner>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
