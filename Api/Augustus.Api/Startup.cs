@@ -39,7 +39,8 @@ namespace Augustus.Api
                 {
                     builder
                         .WithOrigins("http://localhost:4200")
-                        .WithHeaders("Content-Type");
+                        .WithHeaders("Content-Type")
+                        .WithMethods(HttpMethods.Get, HttpMethods.Post, HttpMethods.Put, HttpMethods.Delete);
                 });
             });
 

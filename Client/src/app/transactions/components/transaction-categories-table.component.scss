@@ -1,0 +1,92 @@
+.aug-child-row {
+    .mat-column-name span {
+        padding-left: 36px;
+    }
+
+    .mat-column-expander {
+        border: 0;
+    }
+}
+
+.mat-cell {
+    border-bottom: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.mat-row {
+    &:first-child {
+        .mat-cell {
+            border: 0;
+        }
+    }
+}
+
+.mat-table {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.mat-column-expander {
+    padding-left: 12px !important;
+    width: 48px;
+}
+
+.mat-column-name {
+    min-width: 200px;
+}
+
+.mat-column-count {
+    min-width: 100px;
+}
+
+.mat-row {
+    cursor: pointer;
+}
+
+.hidden-row {
+    display: none;
+}
+
+.example-tree-invisible {
+    display: none;
+  }
+
+  .example-tree ul,
+  .example-tree li {
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+  }
+
+  .example-tree .mat-tree-node {
+    padding-left: 40px;
+  }
+
+  .example-tree .mat-nested-tree-node > .mat-tree-node {
+    padding-left: 0;
+  }
+
+
+  /*
+   * Padding for leaf nodes.
+   * Leaf nodes need to have padding so as to align with other non-leaf nodes
+   * under the same parent.
+   */
+  .example-tree div[role=group] > .mat-tree-node {
+    padding-left: 60px;
+
+    padding-left: 20px;
+    margin-left: 40px;
+  }
+
+  .mat-tree-node:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  div[role=group] {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  .mat-chip {
+    padding: 0px 8px;
+    min-height: 24px;
+  }

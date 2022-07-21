@@ -1,0 +1,61 @@
+<table class="full-width" mat-table [dataSource]="categories">
+
+    <ng-container matColumnDef="expander">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let category">
+            <button *ngIf="category.hasSubCategories" mat-icon-button>
+                <mat-icon class="mat-icon-rtl-mirror">
+                    {{ category.isExpanded ? 'expand_more' : 'chevron_right' }}
+                </mat-icon>
+            </button>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let category">
+            <span>{{ category.name }}</span>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="count">
+        <th mat-header-cell *matHeaderCellDef>Count</th>
+        <td mat-cell *matCellDef="let category">
+            <mat-chip-list *ngIf="category.count">
+                <mat-chip [disableRipple]="true">{{ category.count }}</mat-chip>
+            </mat-chip-list>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let category">
+            <button mat-icon-button (click)="onEditClick(category, $event)">
+                <mat-icon class="mat-icon-rtl-mirror">edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onDeleteClick(category, $event)">
+                <mat-icon class="mat-icon-rtl-mirror">delete</mat-icon>
+            </button>
+            <button mat-icon-button *ngIf="!category.parentId" (click)="onAddSubCategoryClick(category, $event)">
+                <mat-icon class="mat-icon-rtl-mirror">add_circle</mat-icon>
+            </button>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="add">
+        <th mat-header-cell *matHeaderCellDef>
+            <button mat-icon-button (click)="onAddSubCategoryClick(null, $event)">
+                <mat-icon class="mat-icon-rtl-mirror">add_circle</mat-icon>
+            </button>
+        </th>
+        <td mat-cell *matCellDef></td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr
+        mat-row
+        *matRowDef="let category; columns: columns"
+        [class.aug-child-row]="category.parentId"
+        [class.hidden-row]="!isRowVisible(category)"
+        (click)="onRowClick(category)">
+    </tr>
+</table>

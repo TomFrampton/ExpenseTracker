@@ -40,9 +40,9 @@ namespace Augustus.Api.Controllers
         }
 
         [HttpGet("categories")]
-        public async Task<IActionResult> GetCategories()
+        public async Task<IActionResult> GetCategories([FromQuery] bool includeCounts = false)
         {
-            return Ok(await _transactionsService.GetTransactionCategories());
+            return Ok(await _transactionsService.GetTransactionCategories(includeCounts));
         }
 
         [HttpGet("earliest-year")]
@@ -67,7 +67,7 @@ namespace Augustus.Api.Controllers
         public async Task<IActionResult> Categorise([FromBody] TransactionCategorisationRequest model)
         {
             await _transactionsService.CategoriseTransactions(model);
-            return Ok();
+            return NoContent();
         }
 
         [HttpPost("upload")]
@@ -75,6 +75,29 @@ namespace Augustus.Api.Controllers
         {
             TransactionImportResponse result = await _transactionsService.UploadTransactions(file);
             return Ok(result);
+        }
+
+        [HttpPost("categories")]
+        public async Task<IActionResult> AddTransactionCategory([FromBody] AddTransactionCategoryRequest model)
+        {
+            TransactionCategory result = await _transactionsService.AddTransactionCategory(model);
+            return Ok(result);
+        }
+
+        [HttpPut("categories/{id:int}")]
+        public async Task<IActionResult> UpdateTransactionCategory([FromRoute] int id, [FromBody] UpdateTransactionCategoryRequest model)
+        {
+            model.Id = id;
+            TransactionCategory result = await _transactionsService.UpdateTransactionCategory(model);
+
+            return Ok(result);
+        }
+
+        [HttpDelete("categories/{id:int}")]
+        public async Task<IActionResult> DeleteTransactionCategory([FromRoute] int id)
+        {
+            await _transactionsService.DeleteTransactionCategory(id);
+            return NoContent();
         }
     }
 }

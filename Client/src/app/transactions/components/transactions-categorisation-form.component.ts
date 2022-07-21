@@ -23,20 +23,22 @@ export class TransactionsCategorisationFormComponent implements OnInit, OnChange
 
     @Output() categorise = new EventEmitter<TransactionCategorisation>();
 
+    parentCategories: TransactionCategory[] = [];
     subCategories: TransactionCategory[] = [];
 
     form: FormGroup;
 
-    constructor(private formBuilder: FormBuilder) {
-
-    }
+    constructor(private formBuilder: FormBuilder) {}
 
     ngOnInit(): void {
         this.buildForm();
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        //throw new Error('Method not implemented.');
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes && changes.categories) {
+            const currentValue = changes.categories.currentValue as TransactionCategory[];
+            this.parentCategories = currentValue?.filter(x => x.parentId == null);
+        }
     }
 
     ngOnDestroy(): void {
@@ -62,7 +64,7 @@ export class TransactionsCategorisationFormComponent implements OnInit, OnChange
         });
 
         this.form.controls.category.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(categoryId => {
-            this.subCategories = categoryId && this.categories.find(x => x.id === categoryId)?.subCategories || [];
+            this.subCategories = categoryId && this.categories.filter(x => x.parentId === categoryId) || [];
 
             if (this.subCategories.length === 0) {
                 this.form.controls.subCategory.setValue(null);

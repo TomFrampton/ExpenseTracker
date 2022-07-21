@@ -17,6 +17,11 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatSortModule } from '@angular/material/sort';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTreeModule } from '@angular/material/tree';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { MatChipsModule } from '@angular/material/chips';
+import {MatBadgeModule} from '@angular/material/badge';
 
 import { AugustusCommonModule } from '@aug/common/common.module';
 
@@ -30,12 +35,15 @@ import {
 } from './containers';
 
 import {
+    TransactionCategoriesTableComponent,
     TransactionDetailFormComponent,
     TransactionsCategorisationFormComponent,
     TransactionsSearchFormComponent,
     TransactionsTableComponent,
     TransactionsUploadFormComponent
 } from './components';
+
+import { TransactionCategoryDeleteDialogComponent, TransactionCategoryEditDialogComponent } from './dialogs';
 
 
 const routes: Routes = [
@@ -66,6 +74,11 @@ const routes: Routes = [
         MatInputModule,
         MatSortModule,
         MatButtonToggleModule,
+        MatTreeModule,
+        MatTooltipModule,
+        MatDialogModule,
+        MatChipsModule,
+        MatBadgeModule,
 
         AugustusCommonModule
     ],
@@ -82,11 +95,17 @@ const routes: Routes = [
         TransactionDetailFormComponent,
         TransactionsCategorisationFormComponent,
         TransactionsSearchFormComponent,
-        TransactionsUploadFormComponent
+        TransactionsUploadFormComponent,
+        TransactionCategoriesTableComponent,
+
+        // Dialogs
+        TransactionCategoryDeleteDialogComponent,
+        TransactionCategoryEditDialogComponent
     ],
 
     providers: [
-        TransactionService
+        TransactionService,
+        { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { minWidth: 400, hasBackdrop: true, autoFocus: 'input' }}
     ]
 })
 export class TransactionsModule { }

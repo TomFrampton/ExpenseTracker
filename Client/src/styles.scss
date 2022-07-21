@@ -77,6 +77,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     margin-left: 16px;
 }
 
+.no-margin-bottom {
+    margin-bottom: 0 !important;
+}
+
 .half-pad-top {
     padding-top: 8px;
 }
@@ -87,6 +91,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .double-pad-top {
     padding-top: 32px;
+}
+
+.border-top {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.border-bottom {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .golden-ratio-container {

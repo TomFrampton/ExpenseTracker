@@ -2,11 +2,13 @@
 using Augustus.Api.Extensions;
 using Augustus.Api.Infrastructure;
 using Augustus.Api.Models;
+using Augustus.Api.Models.Exceptions;
 using Augustus.Api.Models.Transactions;
 using Augustus.Api.Queries;
 using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,13 +97,17 @@ namespace Augustus.Api.Services
             return await _context.Transactions.FindAsync(id);
         }
 
-        public async Task<IEnumerable<TransactionCategory>> GetTransactionCategories()
+        public async Task<IEnumerable<TransactionCategoryResponse>> GetTransactionCategories(bool includeCounts = false)
         {
             return await _context.TransactionCategories
-                .Include(x => x.SubCategories)
                 .AsNoTracking()
-                .Where(x => x.ParentId == null)
-                .ToListAsync();
+                .SelectListAsync(entity => new TransactionCategoryResponse
+                {
+                    Id = entity.Id,
+                    Name = entity.Name,
+                    ParentId = entity.ParentId,
+                    Count = includeCounts ? _context.Transactions.Count(t => t.CategoryId == entity.Id || t.SubCategoryId == entity.Id) : null
+                });
         }
 
         public async Task<int?> GetTransactionEarliestYear()
@@ -230,6 +236,73 @@ namespace Augustus.Api.Services
                 ImportedTransactionsCount = transactionsToAdd.Count,
                 IgnoredTransactionsCount = leftJoin.Count(pair => pair.Entity != null && pair.Excel != null)
             };
+        }
+
+        public async Task<TransactionCategory> AddTransactionCategory(AddTransactionCategoryRequest model)
+        {
+            // TODO - Do proper validation with fluent validations
+            if (string.IsNullOrWhiteSpace(model?.Name))
+                throw new ArgumentException("New transaction category name is missing");
+
+            var category = new TransactionCategory
+            {
+                Name = model.Name,
+                ParentId = model.ParentId,
+            };
+
+            await _context.AddAsync(category);
+            await _context.SaveChangesAsync();
+
+            return category;
+        }
+
+        public async Task<TransactionCategory> UpdateTransactionCategory(UpdateTransactionCategoryRequest model)
+        {
+            // TODO - Do proper validation with fluent validations
+            if (string.IsNullOrWhiteSpace(model?.Name))
+                throw new ArgumentException("New transaction category name is missing");
+
+            TransactionCategory category = await _context.TransactionCategories.FindAsync(model.Id);
+
+            if (category == null)
+                throw new NotFoundException($"Transaction category with ID '{model.Id}' not found");
+
+            category.Name = model.Name;
+
+            _context.Update(category);
+            await _context.SaveChangesAsync();
+
+            return category;
+        }
+
+        public async Task DeleteTransactionCategory(int id)
+        {
+            TransactionCategory category = await _context.TransactionCategories.FindAsync(id);
+
+            if (category == null)
+                throw new NotFoundException($"Transaction category with ID '{id}' not found");
+
+            IExecutionStrategy strategy = _context.Database.CreateExecutionStrategy();
+
+            // https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency#execution-strategies-and-transactions
+            await strategy.ExecuteInTransactionAsync(
+                operation: async () =>
+                {
+                    // We can't use cascade delete or set null in these FK relationships due to multiple cascade paths.
+                    // To fix this would have to have Transaction reference a single Category, not an explicit main and sub category.
+                    // Think about changing this and then having the main/sub categorisation managed implicitly.
+                    await _context.Database.ExecuteSqlRawAsync(@$"
+                        UPDATE Transactions SET CategoryId = NULL WHERE CategoryId = {id};
+                        UPDATE Transactions SET SubCategoryId = NULL WHERE SubCategoryId = {id};");
+
+                    _context.Remove(category);
+
+                    await _context.SaveChangesAsync();
+                },
+                verifySucceeded: () =>
+                {
+                    return _context.TransactionCategories.NotAnyAsync(x => x.Id == id);
+                });
         }
 
         private class TransactionPair

@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Delete Category?</h2>
+
+<div mat-dialog-content class="border-top border-bottom">
+    <div class=" pad-top pad-bottom">
+
+        <ng-container *ngIf="!deleteEnabled">
+            <p class="no-margin-bottom">
+                You cannot delete this category because it has child categories. To delete this category you must delete the child categories first.
+            </p>
+        </ng-container>
+
+        <ng-container *ngIf="deleteEnabled">
+            <p *ngIf="data.categorisedCount">
+                <strong>
+                    This category is linked to {{ data.categorisedCount }} transaction{{ pluraliseText ? 's' : '' }}.
+                    Deleting this category will uncategorise {{ pluraliseText ? 'these' : 'this' }} transaction{{ pluraliseText ? 's' : '' }}.
+                </strong>
+            </p>
+            <p class="no-margin-bottom">
+                Are you sure you want to delete this category?
+            </p>
+        </ng-container>
+    </div>
+</div>
+
+<div mat-dialog-actions class="flex-end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button [mat-dialog-close]="true" color="primary" [disabled]="!deleteEnabled">Delete</button>
+</div>

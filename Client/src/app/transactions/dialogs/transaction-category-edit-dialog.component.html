@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>{{ dialogTitle }}</h2>
+
+<div mat-dialog-content class="border-top border-bottom">
+    <form class="half-pad-top" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="standard" class="full-width">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" cdkFocusInitial formControlName="name" />
+        </mat-form-field>
+    </form>
+</div>
+
+<div mat-dialog-actions class="flex-end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button [mat-dialog-close]="form.value.name" color="primary">Save</button>
+</div>

@@ -1,0 +1,26 @@
+<div class="content-container">
+    <mat-card>
+        <mat-card-title>
+            <h2>Categories</h2>
+            <button mat-icon-button (click)="onAdd()">
+                <mat-icon class="mat-icon-rtl-mirror">add_circle</mat-icon>
+            </button>
+        </mat-card-title>
+
+        <mat-divider></mat-divider>
+
+        <mat-card-content>
+            <aug-transaction-categories-table
+                *ngIf="(categories$ | async) as categories"
+                [categories]="categories"
+                (edit)="onEdit($event)"
+                (addSubCategory)="onAddSubCategory($event)"
+                (delete)="onDelete($event)">
+            </aug-transaction-categories-table>
+
+            <div *ngIf="isLoading" class="aug-mat-card-overlay">
+                <mat-spinner [diameter]="30"></mat-spinner>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

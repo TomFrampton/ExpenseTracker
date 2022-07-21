@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { Transaction, TransactionCategorisationRequest, TransactionCategorisationSummaryResponse, TransactionCategory, TransactionPeriodCategoryTotalsResponse, TransactionQueryResponse } from '../models';
 import { delay } from 'rxjs/operators';
 
+import { Id } from '@aug/common/id';
 import { TransactionQueryParams } from '../containers';
 
 
@@ -23,8 +24,8 @@ export class TransactionService {
         return this.httpClient.get<Transaction>(`./transactions/${transactionId}`);
     }
 
-    getCategories(): Observable<TransactionCategory[]> {
-        return this.httpClient.get<TransactionCategory[]>('./transactions/categories');
+    getCategories(includeCounts = false): Observable<TransactionCategory[]> {
+        return this.httpClient.get<TransactionCategory[]>(`./transactions/categories?includeCounts=${includeCounts}`).pipe(delay(500));
     }
 
     getEarliestYear(): Observable<number> {
@@ -49,6 +50,18 @@ export class TransactionService {
 
         return this.httpClient.post('./transactions/upload', formData);
 
+    }
+
+    addCategory(name: string, parentId: Id<TransactionCategory> = null) {
+        return this.httpClient.post('./transactions/categories', { name, parentId }).pipe(delay(500));
+    }
+
+    updateCategory(id: Id<TransactionCategory>, name: string) {
+        return this.httpClient.put(`./transactions/categories/${id}`, { name }).pipe(delay(500));
+    }
+
+    deleteCategory(id: Id<TransactionCategory>) {
+        return this.httpClient.delete(`./transactions/categories/${id}`).pipe(delay(500));
     }
 
     private buildQueryParams(params: any) {
