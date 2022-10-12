@@ -1,7 +1,7 @@
 
 <mat-toolbar class="flex flex-space-between mat-elevation-z6">
     <span>Augustus</span>
-    <div>
+    <div *ngIf="showItems">
         <a mat-button routerLink="health">Health</a>
         <a mat-button routerLink="dashboard">Dashboard</a>
         <a mat-button routerLink="transactions">Transactions</a>

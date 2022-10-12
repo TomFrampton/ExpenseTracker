@@ -3,12 +3,14 @@ using Augustus.Api.Extensions;
 using Augustus.Api.Infrastructure;
 using Augustus.Api.Models;
 using Augustus.Api.Models.Exceptions;
+using Augustus.Api.Models.Options;
 using Augustus.Api.Models.Transactions;
 using Augustus.Api.Queries;
 using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +23,13 @@ namespace Augustus.Api.Services
     {
         private readonly ExcelTransactionsParser _excelTransactionsParser;
         private readonly AugustusContext _context;
+        private readonly ApplicationOptions _applicationOptions;
 
-        public TransactionsService(ExcelTransactionsParser excelTransactionsParser, AugustusContext context)
+        public TransactionsService(ExcelTransactionsParser excelTransactionsParser, AugustusContext context, IOptions<ApplicationOptions> applicationOptions)
         {
             _excelTransactionsParser = excelTransactionsParser ?? throw new ArgumentNullException(nameof(excelTransactionsParser));
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _applicationOptions = applicationOptions?.Value ?? throw new ArgumentNullException(nameof(applicationOptions));
         }
 
         public async Task<TransactionQueryResponse> GetTransactions(TransactionQueryRequest request, CancellationToken cancellationToken)
@@ -136,7 +140,7 @@ namespace Augustus.Api.Services
         {
             // Don't use a using statement here as we don't want to dispose of the connection manually
             var connection = _context.Database.GetDbConnection();
-            var result = await connection.QueryAsync<TransactionsByCategoryAndMonth>(TransactionsByCategoryAndMonth.Sql);
+            var result = await connection.QueryAsync<TransactionsByCategoryAndMonth>(TransactionsByCategoryAndMonth.Sql(_applicationOptions.IsDemo));
 
             var response = result
                 .GroupBy(x => x.Date)

@@ -21,9 +21,10 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips';
-import {MatBadgeModule} from '@angular/material/badge';
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { AugustusCommonModule } from '@aug/common/common.module';
+import { DemoInitialisedGuard } from '@aug/core/guards';
 
 import { TransactionService } from './services';
 
@@ -47,12 +48,12 @@ import { TransactionCategoryDeleteDialogComponent, TransactionCategoryEditDialog
 
 
 const routes: Routes = [
-    { path: 'transactions', component: TransactionsPageComponent, children: [
+    { path: 'transactions', component: TransactionsPageComponent, canActivate: [DemoInitialisedGuard], children: [
         { path: 'list', component: TransactionsListPageComponent },
         { path: 'categories', component: TransactionsCategoriesPageComponent },
         { path: 'upload', component: TransactionsUploadPageComponent },
         { path: '**', redirectTo: 'list' }
-    ]},
+    ]}
 ];
 
 @NgModule({

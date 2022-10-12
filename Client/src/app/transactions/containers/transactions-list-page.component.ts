@@ -28,7 +28,8 @@ export interface TransactionQueryParams {
 })
 export class TransactionsListPageComponent implements OnInit {
     private readonly refreshTransactions$ = new Subject<void>();
-    private readonly queryChange$ = new BehaviorSubject<TransactionQueryParams>({ pageSize: 5, pageNumber: 1, searchTerm: null, dateSortDirection: null, type: TransactionType.uncategorised.code });
+    private readonly queryChange$ = new BehaviorSubject<TransactionQueryParams>({
+        pageSize: 5, pageNumber: 1, searchTerm: null, dateSortDirection: null, type: TransactionType.all.code });
 
     transactionRows$: Observable<TransactionTableRow[]>;
     transactionCategories$: Observable<TransactionCategory[]>;

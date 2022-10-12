@@ -7,6 +7,7 @@ import { CoreModule } from './core/core.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { AugustusCommonModule } from './common/common.module';
+import { DemoModule } from './demo/demo.module';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { AugustusCommonModule } from './common/common.module';
 
     DashboardModule,
     TransactionsModule,
+    DemoModule,
 
     AppRoutingModule,
 

@@ -17,6 +17,8 @@
     ],
     "paths": {
         "@aug/common/*": ["src/app/common/*"],
+        "@aug/core/*": ["src/app/core/*"],
+        "@aug/demo/*": ["src/app/demo/*"],
         "@aug/transactions/*": ["src/app/transactions/*"]
     }
   },

@@ -1,5 +1,7 @@
 using Augustus.Api.Application.Transactions;
 using Augustus.Api.Infrastructure;
+using Augustus.Api.Middleware;
+using Augustus.Api.Models.Options;
 using Augustus.Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,11 +10,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Augustus.Api
 {
@@ -33,27 +33,62 @@ namespace Augustus.Api
         {
             services.AddApplicationInsightsTelemetry();
 
+            services.AddOptions();
+
+            var applicationOptions = Configuration.GetSection("Application");
+            services.Configure<ApplicationOptions>(applicationOptions);
+
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(1000);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
+
             services.AddCors(options =>
             {
                 options.AddPolicy(DevelopmentCorsPolicy, builder =>
                 {
                     builder
                         .WithOrigins("http://localhost:4200")
-                        .WithHeaders("Content-Type")
-                        .WithMethods(HttpMethods.Get, HttpMethods.Post, HttpMethods.Put, HttpMethods.Delete);
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                        .AllowAnyMethod();
                 });
             });
 
-            services.AddDbContext<AugustusContext>(options =>
+            if (applicationOptions.GetValue<bool>("IsDemo"))
             {
-                options.UseSqlServer(Configuration.GetConnectionString("Augustus"), providerOptions =>
+                // If we are in demo mode then use the in-memory database provider
+                services.AddScoped(serviceProvider =>
                 {
-                    providerOptions.EnableRetryOnFailure();
+                    var provider = serviceProvider.GetRequiredService<InMemoryDatabaseProvider>();
+                    return provider.GetDatabase();
                 });
-            });
+            }
+            else
+            {
+                // If in non-demo mode then use the main database
+                services.AddDbContext<AugustusContext>(options =>
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("Augustus"), providerOptions =>
+                    {
+                        providerOptions.EnableRetryOnFailure();
+                    });
+                });
+            }
 
             services.AddTransient<TransactionsService>();
+            services.AddTransient<DemoService>();
             services.AddTransient<ExcelTransactionsParser>();
+            services.AddTransient<InMemoryDatabaseProvider>();
+
+            // To allow access to HttpContext.Session via DI
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddControllers();
 
@@ -64,7 +99,7 @@ namespace Augustus.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<ApplicationOptions> applicationOptions)
         {
             if (env.IsDevelopment())
             {
@@ -81,16 +116,23 @@ namespace Augustus.Api
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseSession();
+
+            app.UseMiddleware<DemoNotInitialisedExceptionMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
 
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            if (!applicationOptions.Value.IsDemo)
             {
-                var context = serviceScope.ServiceProvider.GetRequiredService<AugustusContext>();
-                context.Database.Migrate();
+                using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+                {
+                    var context = serviceScope.ServiceProvider.GetRequiredService<AugustusContext>();
+                    //context.Database.Migrate();
+                    context.Database.EnsureCreated();
+                }
             }
         }
     }

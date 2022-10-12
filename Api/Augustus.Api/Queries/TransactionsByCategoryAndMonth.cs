@@ -4,10 +4,10 @@ namespace Augustus.Api.Queries
 {
     public class TransactionsByCategoryAndMonth
     {
-        public const string Sql = @"
+        public static string Sql(bool supportSqlite = false) => $@"
             SELECT
-                DATEPART([Month], [Date]) AS 'Month',
-                DATEPART([Year], [Date]) AS 'Year',
+                {(supportSqlite ? "strftime('%m', [Date])" : "DATEPART([Month], [Date])")} AS 'Month',
+                {(supportSqlite ? "strftime('%Y', [Date])" : "DATEPART([Year], [Date])")} AS 'Year',
                 [CategoryId],
                 [tc].[Name] AS 'CategoryName',
                 COUNT(*) AS 'TransactionCount',
@@ -19,8 +19,8 @@ namespace Augustus.Api.Queries
             WHERE
                 [CategoryId] IS NOT NULL
             GROUP BY
-                DATEPART([Month], [Date]),
-                DATEPART([Year], [Date]),
+                {(supportSqlite ? "[Month]" : "DATEPART([Month], [Date])")},
+                {(supportSqlite ? "[Year]" : "DATEPART([Year], [Date])")},
                 [CategoryId],
                 [tc].[Name]
             ORDER BY
