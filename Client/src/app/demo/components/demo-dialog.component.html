@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Welcome to the Expense Tracker Demo</h2>
+<mat-dialog-content class="mat-typography">
+    <div class="page-container" [ngSwitch]="page" [@navigate]="page">
+        <div *ngSwitchCase="1">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a velit lorem. Quisque feugiat egestas sapien a feugiat. Vivamus viverra sodales lorem, in egestas tellus placerat ut. Proin dolor orci, efficitur id congue non, sollicitudin sit amet nunc. Maecenas in consectetur arcu, id pretium arcu. Nullam ornare felis eu lorem gravida, ac gravida leo iaculis. Quisque porttitor consequat convallis. Morbi vehicula massa vitae enim tincidunt, vel convallis nibh accumsan.
+        </div>
+        <div *ngSwitchCase="2">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a velit lorem. Quisque feugiat egestas sapien a feugiat. Vivamus viverra sodales lorem, in egestas tellus placerat ut. Proin dolor orci, efficitur id congue non, sollicitudin sit amet nunc. Maecenas in consectetur arcu, id pretium arcu. Nullam ornare felis eu lorem gravida, ac gravida leo iaculis. Quisque porttitor consequat convallis. Morbi vehicula massa vitae enim tincidunt, vel convallis nibh accumsan.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a velit lorem. Quisque feugiat egestas sapien a feugiat. Vivamus viverra sodales lorem, in egestas tellus placerat ut. Proin dolor orci, efficitur id congue non, sollicitudin sit amet nunc. Maecenas in consectetur arcu, id pretium arcu. Nullam ornare felis eu lorem gravida, ac gravida leo iaculis. Quisque porttitor consequat convallis. Morbi vehicula massa vitae enim tincidunt, vel convallis nibh accumsan.
+        </div>
+        <div *ngSwitchCase="3">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a velit lorem. Quisque feugiat egestas sapien a feugiat. Vivamus viverra sodales lorem, in egestas tellus placerat ut. Proin dolor orci, efficitur id congue non, sollicitudin sit amet nunc. Maecenas in consectetur arcu, id pretium arcu. Nullam ornare felis eu lorem gravida, ac gravida leo iaculis. Quisque porttitor consequat convallis. Morbi vehicula massa vitae enim tincidunt, vel convallis nibh accumsan.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a velit lorem. Quisque feugiat egestas sapien a feugiat. Vivamus viverra sodales lorem, in egestas tellus placerat ut. Proin dolor orci, efficitur id congue non, sollicitudin sit amet nunc. Maecenas in consectetur arcu, id pretium arcu. Nullam ornare felis eu lorem gravida, ac gravida leo iaculis. Quisque porttitor consequat convallis. Morbi vehicula massa vitae enim tincidunt, vel convallis nibh accumsan.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a velit lorem. Quisque feugiat egestas sapien a feugiat. Vivamus viverra sodales lorem, in egestas tellus placerat ut. Proin dolor orci, efficitur id congue non, sollicitudin sit amet nunc. Maecenas in consectetur arcu, id pretium arcu. Nullam ornare felis eu lorem gravida, ac gravida leo iaculis. Quisque porttitor consequat convallis. Morbi vehicula massa vitae enim tincidunt, vel convallis nibh accumsan.
+        </div>
+    </div>
+
+    <div *ngIf="isLoading" class="aug-mat-overlay">
+        <mat-spinner [diameter]="30"></mat-spinner>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button [disabled]="!isPreviousEnabled" (click)="onPreviousClick()">
+        Previous
+    </button>
+    <button *ngIf="showNextButton" mat-button [disabled]="!isNextEnabled" (click)="onNextClick()">
+        Next
+    </button>
+    <button *ngIf="showStartDemoButton" mat-button [disabled]="!isStartDemoEnabled" (click)="onStartDemoClick()">
+        Start Demo
+    </button>
+</mat-dialog-actions>

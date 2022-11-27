@@ -2,7 +2,7 @@
     <mat-card>
         <mat-card-title>
             <h2>Categories</h2>
-            <button mat-icon-button (click)="onAdd()">
+            <button mat-icon-button (click)="onAdd()" [disabled]="isLoading">
                 <mat-icon class="mat-icon-rtl-mirror">add_circle</mat-icon>
             </button>
         </mat-card-title>
@@ -18,7 +18,7 @@
                 (delete)="onDelete($event)">
             </aug-transaction-categories-table>
 
-            <div *ngIf="isLoading" class="aug-mat-card-overlay">
+            <div *ngIf="isLoading" class="aug-mat-overlay">
                 <mat-spinner [diameter]="30"></mat-spinner>
             </div>
         </mat-card-content>

@@ -30,12 +30,12 @@
                 (dateSortChange)="onDateSortChange($event)">
             </aug-transactions-table>
 
-            <div *ngIf="isLoading" class="aug-mat-card-overlay">
+            <div *ngIf="isLoading" class="aug-mat-overlay">
                 <mat-spinner [diameter]="30"></mat-spinner>
             </div>
         </mat-card-content>
 
-        <!-- <div *ngIf="!transactionsFirstLoad && transactionsLoading" class="aug-mat-card-overlay">
+        <!-- <div *ngIf="!transactionsFirstLoad && transactionsLoading" class="aug-mat-overlay">
             <mat-spinner [diameter]="30"></mat-spinner>
         </div> -->
     </mat-card>
@@ -60,7 +60,7 @@
                 <p *ngIf="!isLoading && selectedTransactions.length === 0" class="aug-mat-card-placeholder">Select transactions to categorise</p>
             </ng-container>
 
-            <div *ngIf="isLoading" class="aug-mat-card-overlay">
+            <div *ngIf="isLoading" class="aug-mat-overlay">
                 <mat-spinner [diameter]="30"></mat-spinner>
             </div>
         </mat-card-content>

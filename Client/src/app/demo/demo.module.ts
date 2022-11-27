@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { RouterModule, Routes } from '@angular/router';
+
+import { MatDialogModule } from '@angular/material/dialog';
+
 import { AugustusCommonModule } from '@aug/common/common.module';
 
 import { DemoPageComponent } from './containers';
+import { DemoDialogComponent } from './components/demo-dialog.component';
 
 const routes: Routes = [
     { path: 'demo', component: DemoPageComponent, children: [] },
@@ -15,6 +18,9 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         CommonModule,
 
+        // Angular Material
+        MatDialogModule,
+
         AugustusCommonModule
     ],
     declarations: [
@@ -22,6 +28,9 @@ const routes: Routes = [
         DemoPageComponent,
 
         // Components
+
+        // Dialogs
+        DemoDialogComponent
     ]
 })
 export class DemoModule {}

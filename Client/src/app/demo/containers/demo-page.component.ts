@@ -1,27 +1,29 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 import { DemoService } from 'src/app/core/services/demo.service';
+import { DemoDialogComponent } from '../components/demo-dialog.component';
 
 @Component({
     selector: 'aug-demo-page',
-    template: `
-        <h2>Welcome to Demo</h2>
-        <button (click)="onStartDemoClick()">Click to Start</button>
-    `
+    templateUrl: './demo-page.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DemoPageComponent {
-    constructor(private demoService: DemoService, private router: Router, private snackBar: MatSnackBar) {}
+    isLoading = false;
 
-    onStartDemoClick() {
-        this.demoService.start().subscribe(
-            () => {
-                sessionStorage.setItem("DemoInitialised", "true");
+    dialogRef: MatDialogRef<DemoDialogComponent>;
+
+    constructor(
+        private demoService: DemoService,
+        private router: Router,
+        private snackBar: MatSnackBar,
+        public dialog: MatDialog) {
+            this.dialogRef = this.dialog.open(DemoDialogComponent, { disableClose : true, width: '800px' });
+            this.dialogRef.afterClosed().subscribe(() => {
                 this.router.navigate(['./transactions']);
-            },
-            err => {
-                this.snackBar.open('Error initialising demo', null, { duration: 2000 });
             });
-    }
+        }
 }
