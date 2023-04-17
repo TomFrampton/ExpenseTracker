@@ -10,7 +10,7 @@ namespace Augustus.Api.Tests
         public void Test1()
         {
             var excelParser = new ExcelTransactionsParser();
-            excelParser.ParseTransactions(null);
+            excelParser.ParseUploadedTransactions(null);
         }
     }
 }

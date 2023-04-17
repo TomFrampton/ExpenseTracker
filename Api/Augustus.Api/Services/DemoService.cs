@@ -1,10 +1,16 @@
-﻿using Augustus.Api.Infrastructure;
+﻿using Augustus.Api.Application.Transactions;
+using Augustus.Api.Extensions;
+using Augustus.Api.Infrastructure;
 using Augustus.Api.Models.Options;
+using Augustus.Api.Models.Transactions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Augustus.Api.Services
 {
@@ -12,11 +18,16 @@ namespace Augustus.Api.Services
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ApplicationOptions _applicationOptions;
+        private readonly ExcelTransactionsParser _excelTransactionsParser;
 
-        public DemoService(IHttpContextAccessor httpContextAccessor, IOptions<ApplicationOptions> applicationOptions)
+        public DemoService(
+            IHttpContextAccessor httpContextAccessor, 
+            IOptions<ApplicationOptions> applicationOptions, 
+            ExcelTransactionsParser excelTransactionsParser)
         {
             _httpContextAccessor = httpContextAccessor;
             _applicationOptions = applicationOptions.Value;
+            _excelTransactionsParser = excelTransactionsParser;
 
             if (string.IsNullOrWhiteSpace(_applicationOptions.DemoDatabaseDirectory))
                 throw new ArgumentException("Demo database directory not set in config");
@@ -30,7 +41,7 @@ namespace Augustus.Api.Services
             return File.Exists(sessionStoreFilename);
         }
 
-        public void Start()
+        public async Task Start()
         {
             var session = _httpContextAccessor.HttpContext.Session;
 
@@ -45,6 +56,29 @@ namespace Augustus.Api.Services
 
             var context = new AugustusContext(optionsBuilder.Options);
             context.Database.EnsureCreated();
+
+            // If there are no transactions added then initialise demo data
+            if (!await context.Transactions.AnyAsync())
+            {
+                IEnumerable<ExcelDemoTransaction> excelTransactions = _excelTransactionsParser.ParseDemoTransactions(_applicationOptions.DemoTransactionsFile);
+
+                if (excelTransactions.Any())
+                {
+                    var transactions = excelTransactions.SelectList(x => new Transaction
+                    {
+                        Date = x.TransactionDate,
+                        Description = x.TransactionDescription,
+                        UserSuppliedDescription = x.UserSuppliedDescription,
+                        CreditAmount = x.CreditAmount,
+                        DebitAmount = x.DebitAmount,
+                        CategoryId = x.CategoryId,
+                        SubCategoryId = x.SubCategoryId
+                    });
+
+                    await context.AddRangeAsync(transactions);
+                    await context.SaveChangesAsync();
+                }
+            }
 
             _httpContextAccessor.HttpContext.Session.SetString("Demo", "Started");
         }

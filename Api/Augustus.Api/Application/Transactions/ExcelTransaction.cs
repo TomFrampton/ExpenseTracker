@@ -13,4 +13,12 @@ namespace Augustus.Api.Application.Transactions
         public decimal? CreditAmount { get; set; }
         public int OrderId { get; set; }
     }
+
+    public class ExcelDemoTransaction : ExcelTransaction
+    {
+        public string UserSuppliedDescription { get; set; }
+
+        public int? CategoryId { get; set; }
+        public int? SubCategoryId { get; set; }
+    }
 }

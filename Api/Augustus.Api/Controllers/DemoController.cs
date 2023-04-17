@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace Augustus.Api.Controllers
 {
@@ -23,9 +24,9 @@ namespace Augustus.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Start()
+        public async Task<IActionResult> Start()
         {
-            _demoService.Start();
+            await _demoService.Start();
 
             HttpContext.Session.SetString("Demo", "Started");
 

@@ -6,13 +6,9 @@ import { NotFoundComponent } from './not-found.component';
 
 const routes: Routes = [
   {
-    path: 'health',
-    loadChildren: () => import('./health/health.module').then(m => m.HealthModule)
-  },
-  {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'health'
+    redirectTo: 'transactions'
   },
   {
     path: '404',

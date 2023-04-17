@@ -70,6 +70,7 @@ export class TransactionsListPageComponent implements OnInit {
             return this.transactionService.getList(this.queryChange$.value);
         };
 
+        // Refresh transactions when we trigger a manual refresh or the search parameters are changed
         const transactionsResponse$ = merge(
             this.refreshTransactions$.pipe(switchMap(() => getTransactions())),
             this.queryChange$.pipe(switchMap(() => getTransactions()))
@@ -94,6 +95,8 @@ export class TransactionsListPageComponent implements OnInit {
                 pageNumber: this.queryChange$.value.pageNumber
             }))
         );
+
+        // ...
 
         this.searchResultSummary$ = transactionsResponse$.pipe(
             map(response => this.queryChange$.value.searchTerm

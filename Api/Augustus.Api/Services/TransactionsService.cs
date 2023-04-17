@@ -187,7 +187,7 @@ namespace Augustus.Api.Services
 
         public async Task<TransactionImportResponse> UploadTransactions(IFormFile excelFile)
         {
-            IEnumerable<ExcelTransaction> excelTransactions = _excelTransactionsParser.ParseTransactions(excelFile);
+            IEnumerable<ExcelTransaction> excelTransactions = _excelTransactionsParser.ParseUploadedTransactions(excelFile);
             List<Transaction> entityTransactions = await _context.Transactions.ToListAsync();
 
             List<TransactionPair> leftJoin = excelTransactions.GroupJoin(

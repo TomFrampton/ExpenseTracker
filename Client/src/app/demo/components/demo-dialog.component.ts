@@ -63,11 +63,15 @@ export class DemoDialogComponent {
     }
 
     get isNextEnabled() {
-        return !this.isLoading && this.page < this.PAGES;
+        return !this.isLoading;
     }
 
     get isStartDemoEnabled() {
         return !this.isLoading && this.page === this.PAGES;
+    }
+
+    get nextButtonText() {
+        return this.page < this.PAGES ? 'Next' : 'Start Demo';
     }
 
     constructor(
@@ -84,10 +88,12 @@ export class DemoDialogComponent {
     onNextClick() {
         if (this.page < this.PAGES) {
             this.page++;
+        } else {
+            this.startDemo();
         }
     }
 
-    onStartDemoClick() {
+    private startDemo() {
         this.isLoading = true;
 
         // Show dialog do this or should the container do it?
