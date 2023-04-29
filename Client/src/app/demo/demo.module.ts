@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { MatDialogModule } from '@angular/material/dialog';
 
-import { AugustusCommonModule } from '@aug/common/common.module';
+import { ExpensesCommonModule } from '@app/common/common.module';
 
 import { DemoPageComponent } from './containers';
 import { DemoDialogComponent } from './components/demo-dialog.component';
@@ -21,7 +21,7 @@ const routes: Routes = [
         // Angular Material
         MatDialogModule,
 
-        AugustusCommonModule
+        ExpensesCommonModule
     ],
     declarations: [
         // Containers

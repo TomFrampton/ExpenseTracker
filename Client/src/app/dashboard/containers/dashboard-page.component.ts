@@ -3,13 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
-import { TransactionService } from '@aug/transactions/services';
-import { TransactionCategorisationSummaryResponse } from '@aug/transactions/models';
+import { TransactionService } from '@app/transactions/services';
+import { TransactionCategorisationSummaryResponse } from '@app/transactions/models';
 
 import { DashboardExpenditureLineChartData } from '../components';
 
 @Component({
-    selector: 'aug-dashboard-page',
+    selector: 'app-dashboard-page',
     templateUrl: './dashboard-page.component.html'
 })
 export class DashboardPageComponent implements OnInit {

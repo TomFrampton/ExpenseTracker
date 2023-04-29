@@ -16,10 +16,10 @@
       "dom"
     ],
     "paths": {
-        "@aug/common/*": ["src/app/common/*"],
-        "@aug/core/*": ["src/app/core/*"],
-        "@aug/demo/*": ["src/app/demo/*"],
-        "@aug/transactions/*": ["src/app/transactions/*"]
+        "@app/common/*": ["src/app/common/*"],
+        "@app/core/*": ["src/app/core/*"],
+        "@app/demo/*": ["src/app/demo/*"],
+        "@app/transactions/*": ["src/app/transactions/*"]
     }
   },
   "angularCompilerOptions": {

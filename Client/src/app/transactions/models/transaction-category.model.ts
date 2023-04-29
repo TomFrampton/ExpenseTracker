@@ -1,4 +1,4 @@
-import { Id } from '@aug/common/id';
+import { Id } from '@app/common/id';
 
 export interface TransactionCategory {
     id: Id<TransactionCategory>;

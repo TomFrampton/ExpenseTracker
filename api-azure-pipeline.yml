@@ -20,7 +20,7 @@ stages:
 
     variables:
       buildConfiguration: 'Release'
-      projectFilepath: 'Api/Augustus.Api/Augustus.Api.csproj'
+      projectFilepath: 'Api/ExpenseTracker.Api/ExpenseTracker.Api.csproj'
 
     steps:
     - task: DotNetCoreCLI@2
@@ -76,9 +76,9 @@ stages:
             displayName: 'Deploy to Azure'
             inputs:
               ConnectionType: 'AzureRM'
-              azureSubscription: 'Augustus'
+              azureSubscription: 'ExpenseTracker'
               appType: 'webApp'
-              WebAppName: 'augustus-api'
+              WebAppName: 'expense-tracker-api'
               VirtualApplication: '/api'
               packageForLinux: '$(System.ArtifactsDirectory)/drop/api'
               enableCustomDeployment: true
@@ -88,15 +88,15 @@ stages:
           - task: AzureKeyVault@2
             displayName: Retrieve connection string from Azure Key Vault
             inputs:
-              azureSubscription: 'Augustus'
-              KeyVaultName: 'augustus'
+              azureSubscription: 'ExpenseTracker'
+              KeyVaultName: 'expense-tracker'
               SecretsFilter: '*'
               RunAsPreJob: false
 
           - task: SqlAzureDacpacDeployment@1
             displayName: Run SQL migrations
             inputs:
-              azureSubscription: 'Augustus'
+              azureSubscription: 'ExpenseTracker'
               AuthenticationType: 'connectionString'
               ConnectionString: '$(ConnectionString)'
               deployType: 'SqlTask'

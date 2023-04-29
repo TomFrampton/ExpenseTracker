@@ -6,8 +6,8 @@ import { Sort, SortDirection } from '@angular/material/sort';
 import { combineLatest, Subject } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 
-import { Id } from '@aug/common/id';
-import { PaginationSettings, PaginationSummary } from '@aug/common/pagination';
+import { Id } from '@app/common/id';
+import { PaginationSettings, PaginationSummary } from '@app/common/pagination';
 
 import { Transaction } from '../models';
 
@@ -24,7 +24,7 @@ export interface TransactionTableRow {
 }
 
 @Component({
-    selector: 'aug-transactions-table',
+    selector: 'app-transactions-table',
     templateUrl: './transactions-table.component.html',
     styleUrls: ['./transactions-table.component.scss']
 })

@@ -5,8 +5,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
 import { tap, map, switchMap, shareReplay } from 'rxjs/operators';
 
-import { Id } from '@aug/common/id';
-import { PaginationSettings, PaginationSummary } from '@aug/common/pagination';
+import { Id } from '@app/common/id';
+import { PaginationSettings, PaginationSummary } from '@app/common/pagination';
 
 import { TransactionService } from '../services';
 import { TransactionTableRow } from '../components';

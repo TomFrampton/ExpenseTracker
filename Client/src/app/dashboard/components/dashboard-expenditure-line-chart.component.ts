@@ -13,7 +13,7 @@ export interface DashboardExpenditureLineChartData {
 }
 
 @Component({
-    selector: 'aug-dashboard-expenditure-line-chart',
+    selector: 'app-dashboard-expenditure-line-chart',
     templateUrl: './dashboard-expenditure-line-chart.component.html'
 })
 export class DashboardExpenditureLineChartComponent implements OnChanges {

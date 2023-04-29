@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { Transaction, TransactionCategorisationRequest, TransactionCategorisationSummaryResponse, TransactionCategory, TransactionPeriodCategoryTotalsResponse, TransactionQueryResponse } from '../models';
 import { delay } from 'rxjs/operators';
 
-import { Id } from '@aug/common/id';
+import { Id } from '@app/common/id';
 import { TransactionQueryParams } from '../containers';
 
 

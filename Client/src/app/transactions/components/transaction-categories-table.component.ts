@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { Id } from '@aug/common/id';
+import { Id } from '@app/common/id';
 import { TransactionCategory } from '../models';
 
 
@@ -14,7 +14,7 @@ export interface TransactionCategoriesTableRow {
 }
 
 @Component({
-    selector: 'aug-transaction-categories-table',
+    selector: 'app-transaction-categories-table',
     templateUrl: './transaction-categories-table.component.html',
     styleUrls: ['./transaction-categories-table.component.scss']
 })

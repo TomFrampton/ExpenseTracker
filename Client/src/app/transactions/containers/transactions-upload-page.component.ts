@@ -7,7 +7,7 @@ import { TransactionImportResponse } from '../models';
 import { TransactionService } from '../services';
 
 @Component({
-    selector: 'aug-transactions-upload-page',
+    selector: 'app-transactions-upload-page',
     templateUrl: './transactions-upload-page.component.html',
     styleUrls: ['./transactions-upload-page.component.scss']
 })

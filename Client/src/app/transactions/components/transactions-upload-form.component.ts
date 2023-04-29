@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
-    selector: 'aug-transactions-upload-form',
+    selector: 'app-transactions-upload-form',
     templateUrl: './transactions-upload-form.component.html'
 })
 export class TransactionsUploadFormComponent implements OnInit {

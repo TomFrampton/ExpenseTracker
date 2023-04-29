@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { TransactionType } from '../enums';
 
 @Component({
-    selector: 'aug-transactions-search-form',
+    selector: 'app-transactions-search-form',
     templateUrl: './transactions-search-form.component.html',
     styleUrls: ['./transactions-search-form.component.scss']
 })

@@ -54,7 +54,7 @@
     <tr
         mat-row
         *matRowDef="let category; columns: columns"
-        [class.aug-child-row]="category.parentId"
+        [class.app-child-row]="category.parentId"
         [class.hidden-row]="!isRowVisible(category)"
         (click)="onRowClick(category)">
     </tr>

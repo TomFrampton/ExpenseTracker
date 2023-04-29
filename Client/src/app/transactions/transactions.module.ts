@@ -23,8 +23,8 @@ import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/d
 import { MatChipsModule } from '@angular/material/chips';
 import { MatBadgeModule } from '@angular/material/badge';
 
-import { AugustusCommonModule } from '@aug/common/common.module';
-import { DemoInitialisedGuard } from '@aug/core/guards';
+import { ExpensesCommonModule } from '@app/common/common.module';
+import { DemoInitialisedGuard } from '@app/core/guards';
 
 import { TransactionService } from './services';
 
@@ -81,7 +81,7 @@ const routes: Routes = [
         MatChipsModule,
         MatBadgeModule,
 
-        AugustusCommonModule
+        ExpensesCommonModule
     ],
 
     declarations: [

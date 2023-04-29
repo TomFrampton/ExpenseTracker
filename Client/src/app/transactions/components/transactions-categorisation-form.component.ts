@@ -10,7 +10,7 @@ import { TransactionCategorisation } from '../models/transaction-categorisation.
 
 
 @Component({
-    selector: 'aug-transactions-categorisation-form',
+    selector: 'app-transactions-categorisation-form',
     templateUrl: './transactions-categorisation-form.component.html',
     styleUrls: ['./transactions-categorisation-form.component.scss']
 })

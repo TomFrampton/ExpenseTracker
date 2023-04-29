@@ -12,13 +12,13 @@ mat-paginator {
     text-align: right;
 }
 
-.aug-original-description {
+.app-original-description {
     font-size: 10px;
     line-height: 10px;
     color: rgba(0,0,0,0.5);
 }
 
-.aug-categorised-row {
+.app-categorised-row {
     // TODO Use themes
     //background-color: rgba(139, 204, 47, 0.05);
 
@@ -30,7 +30,7 @@ mat-paginator {
     }
 }
 
-.aug-uncategorised-row {
+.app-uncategorised-row {
     // TODO Use themes
     background-color: rgba(192, 57, 43, 0.05);
 

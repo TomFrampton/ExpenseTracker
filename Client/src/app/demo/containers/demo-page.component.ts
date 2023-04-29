@@ -7,7 +7,7 @@ import { DemoService } from 'src/app/core/services/demo.service';
 import { DemoDialogComponent } from '../components/demo-dialog.component';
 
 @Component({
-    selector: 'aug-demo-page',
+    selector: 'app-demo-page',
     templateUrl: './demo-page.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

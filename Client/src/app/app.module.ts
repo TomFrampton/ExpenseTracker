@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { TransactionsModule } from './transactions/transactions.module';
-import { AugustusCommonModule } from './common/common.module';
+import { ExpensesCommonModule } from './common/common.module';
 import { DemoModule } from './demo/demo.module';
 
 @NgModule({
@@ -15,7 +15,7 @@ import { DemoModule } from './demo/demo.module';
   ],
   imports: [
     CoreModule,
-    AugustusCommonModule,
+    ExpensesCommonModule,
 
     DashboardModule,
     TransactionsModule,

@@ -14,9 +14,9 @@
         <mat-divider></mat-divider>
 
         <mat-card-content class="double-pad-top">
-            <aug-dashboard-expenditure-line-chart [data]="monthlyExpenditureData$ | async"></aug-dashboard-expenditure-line-chart>
+            <app-dashboard-expenditure-line-chart [data]="monthlyExpenditureData$ | async"></app-dashboard-expenditure-line-chart>
 
-            <div *ngIf="monthlyExpenditureDataLoading" class="aug-mat-overlay">
+            <div *ngIf="monthlyExpenditureDataLoading" class="app-mat-overlay">
                 <mat-spinner [diameter]="30"></mat-spinner>
             </div>
         </mat-card-content>

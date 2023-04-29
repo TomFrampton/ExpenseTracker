@@ -2,7 +2,7 @@ import { animate, group, query, state, style, transition, trigger } from '@angul
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { DemoService } from '@aug/core/services/demo.service';
+import { DemoService } from '@app/core/services/demo.service';
 
 export const navigate = trigger('navigate', [
     // When going to previous page

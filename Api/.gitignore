@@ -45,3 +45,6 @@ appsettings*.json
 # Publish Profiles
 *.pubxml
 
+#Logs
+*.log
+

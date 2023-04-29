@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Transaction } from '../models/transaction.model';
 
 @Component({
-    selector: 'aug-transaction-detail-form',
+    selector: 'app-transaction-detail-form',
     templateUrl: './transaction-detail-form.component.html'
 })
 export class TransactionDetailFormComponent implements OnChanges {

@@ -12,19 +12,19 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$augustus-primary: mat-palette($mat-indigo);
-$augustus-accent: mat-palette($mat-pink, A200, A100, A400);
+$expenses-primary: mat-palette($mat-indigo);
+$expenses-accent: mat-palette($mat-pink, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
-$augustus-warn: mat-palette($mat-red);
+$expenses-warn: mat-palette($mat-red);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$augustus-theme: mat-light-theme($augustus-primary, $augustus-accent, $augustus-warn);
+$expenses-theme: mat-light-theme($expenses-primary, $expenses-accent, $expenses-warn);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include angular-material-theme($augustus-theme);
+@include angular-material-theme($expenses-theme);
 
 /* You can add global styles to this file, and also import other style files */
 
@@ -129,14 +129,14 @@ h2 {
     align-items: center;
 }
 
-.aug-mat-card-placeholder {
+.app-mat-card-placeholder {
     height: 180px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.aug-mat-overlay {
+.app-mat-overlay {
     position: absolute;
     height: calc(100% - 2px);
     width: calc(100% - 2px);

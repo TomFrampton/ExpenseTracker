@@ -16,7 +16,7 @@
                 <mat-icon matSuffix (click)="onTextSearchSubmit($event)">search</mat-icon>
             </mat-form-field>
         </form>
-        <div *ngIf="resultsSummary" class="aug-results-summary">
+        <div *ngIf="resultsSummary" class="app-results-summary">
             <p [innerHtml]="resultsSummary"></p>
             <button mat-button (click)="onClearSearchResultsClick()">Clear search results</button>
         </div>

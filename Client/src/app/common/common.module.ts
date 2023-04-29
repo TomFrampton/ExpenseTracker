@@ -9,7 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 
-// Augustus
+// Expense Tracker
 import { NavbarComponent } from './navbar/navbar.component';
 import { CardLoadingSpinnerComponent } from './loading-spinner/card-loading-spinner.component';
 
@@ -42,4 +42,4 @@ import { CardLoadingSpinnerComponent } from './loading-spinner/card-loading-spin
         NavbarComponent
     ]
 })
-export class AugustusCommonModule {}
+export class ExpensesCommonModule {}
