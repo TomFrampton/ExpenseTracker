@@ -1,0 +1,11 @@
+svg {
+    margin: -4px 6px -4px 0;
+}
+
+a {
+    font-weight: 400;
+
+    &.active-link {
+        font-weight: 500;
+    }
+}

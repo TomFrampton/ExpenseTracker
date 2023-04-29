@@ -4,14 +4,14 @@
 
 export interface Environment {
     production: boolean;
-    baseUrl: string;
+    apiUrl: string;
     isDemo?: boolean;
 }
 
 export const environment: Environment = {
     production: false,
-    baseUrl: 'https://localhost:44358/',
-    isDemo: true
+    isDemo: true,
+    apiUrl: 'https://localhost:44358/',
 };
 
 /*

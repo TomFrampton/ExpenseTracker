@@ -96,8 +96,6 @@ export class TransactionsListPageComponent implements OnInit {
             }))
         );
 
-        // ...
-
         this.searchResultSummary$ = transactionsResponse$.pipe(
             map(response => this.queryChange$.value.searchTerm
                 ? `${response.totalTransactionsCount} results for "<b>${this.queryChange$.value.searchTerm}</b>"`

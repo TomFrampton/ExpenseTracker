@@ -3,7 +3,8 @@ import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'aug-navbar',
-    templateUrl: './navbar.component.html'
+    templateUrl: './navbar.component.html',
+    styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
     // TODO - Should this be moved out of getter?

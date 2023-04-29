@@ -2,16 +2,23 @@
 <mat-dialog-content class="mat-typography">
     <div class="page-container" [ngSwitch]="page" [@navigate]="page">
         <div *ngSwitchCase="1">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a velit lorem. Quisque feugiat egestas sapien a feugiat. Vivamus viverra sodales lorem, in egestas tellus placerat ut. Proin dolor orci, efficitur id congue non, sollicitudin sit amet nunc. Maecenas in consectetur arcu, id pretium arcu. Nullam ornare felis eu lorem gravida, ac gravida leo iaculis. Quisque porttitor consequat convallis. Morbi vehicula massa vitae enim tincidunt, vel convallis nibh accumsan.
+            <p>This application (codenamed <i>Augustus</i>) allows users to upload, categorise and visualise their personal expenses.<p>
+            <p>This is a sandbox environment unique to you so feel free to play around, re-categorise transactions, add and remove categories and whatever else you feel like!</p>
         </div>
         <div *ngSwitchCase="2">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a velit lorem. Quisque feugiat egestas sapien a feugiat. Vivamus viverra sodales lorem, in egestas tellus placerat ut. Proin dolor orci, efficitur id congue non, sollicitudin sit amet nunc. Maecenas in consectetur arcu, id pretium arcu. Nullam ornare felis eu lorem gravida, ac gravida leo iaculis. Quisque porttitor consequat convallis. Morbi vehicula massa vitae enim tincidunt, vel convallis nibh accumsan.
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a velit lorem. Quisque feugiat egestas sapien a feugiat. Vivamus viverra sodales lorem, in egestas tellus placerat ut. Proin dolor orci, efficitur id congue non, sollicitudin sit amet nunc. Maecenas in consectetur arcu, id pretium arcu. Nullam ornare felis eu lorem gravida, ac gravida leo iaculis. Quisque porttitor consequat convallis. Morbi vehicula massa vitae enim tincidunt, vel convallis nibh accumsan.
+            <img src="./assets/img/select-transactions-300.png" />
+            <h4>Categorising Transactions</h4>
+            <p>To categorise transactions, select them in the transaction list and use the categorisation form on the right to add a description and select a category.</p>
         </div>
         <div *ngSwitchCase="3">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a velit lorem. Quisque feugiat egestas sapien a feugiat. Vivamus viverra sodales lorem, in egestas tellus placerat ut. Proin dolor orci, efficitur id congue non, sollicitudin sit amet nunc. Maecenas in consectetur arcu, id pretium arcu. Nullam ornare felis eu lorem gravida, ac gravida leo iaculis. Quisque porttitor consequat convallis. Morbi vehicula massa vitae enim tincidunt, vel convallis nibh accumsan.
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a velit lorem. Quisque feugiat egestas sapien a feugiat. Vivamus viverra sodales lorem, in egestas tellus placerat ut. Proin dolor orci, efficitur id congue non, sollicitudin sit amet nunc. Maecenas in consectetur arcu, id pretium arcu. Nullam ornare felis eu lorem gravida, ac gravida leo iaculis. Quisque porttitor consequat convallis. Morbi vehicula massa vitae enim tincidunt, vel convallis nibh accumsan.
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a velit lorem. Quisque feugiat egestas sapien a feugiat. Vivamus viverra sodales lorem, in egestas tellus placerat ut. Proin dolor orci, efficitur id congue non, sollicitudin sit amet nunc. Maecenas in consectetur arcu, id pretium arcu. Nullam ornare felis eu lorem gravida, ac gravida leo iaculis. Quisque porttitor consequat convallis. Morbi vehicula massa vitae enim tincidunt, vel convallis nibh accumsan.
+            <img src="./assets/img/categorise-transactions.png" />
+            <h4>Managing Categories</h4>
+            <p>Use the manage categories page to add, edit and delete transaction categories.</p>
+        </div>
+        <div *ngSwitchCase="4">
+            <img src="./assets/img/visualising-transactions.png" class="half-margin-top" />
+            <h4>Visualising Expenses</h4>
+            <p>The dashboard shows visual breakdowns of expenses per category, allowing users to understand how they spend their money.</p>
         </div>
     </div>
 

@@ -45,7 +45,7 @@ export const navigate = trigger('navigate', [
     animations: [navigate],
 })
 export class DemoDialogComponent {
-    private readonly PAGES = 3;
+    private readonly PAGES = 4;
 
     page: number = 1;
     isLoading: boolean = false;

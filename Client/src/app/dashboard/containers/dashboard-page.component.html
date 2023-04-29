@@ -1,6 +1,4 @@
 <div class="content-container">
-    <h2>Dashboard</h2>
-
     <ng-container *ngIf="(categorisationSummary$ | async) as summary">
         <mat-card class="margin-bottom flex flex-space-between" *ngIf="summary.uncategorisedCount > 0">
             <span class="flex-align-self-center">Analysis is imcomplete due to {{summary.uncategorisedCount}} transactions being uncategorised.</span>

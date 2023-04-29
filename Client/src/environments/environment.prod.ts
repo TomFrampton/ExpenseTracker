@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  baseUrl: '/api/'
+  isDemo: true,
+  apiUrl: '/augustus/'
 };

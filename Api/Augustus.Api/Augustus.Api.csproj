@@ -22,4 +22,10 @@
     <Folder Include="DemoDbs\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="DemoTransactions.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

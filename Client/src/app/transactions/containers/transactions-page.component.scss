@@ -13,12 +13,12 @@ mat-progress-bar {
 mat-nav-list {
     width: 250px;
 
+    a {
+        font-size: 14px;
+        height: 44px;
+    }
+
     mat-icon {
         padding-right: 12px;
     }
-}
-
-.active-link {
-    font-weight: 500;
-    background: rgba(0, 0, 0, 0.04); // TODO - Use theming
 }

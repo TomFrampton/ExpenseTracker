@@ -5,10 +5,10 @@ import { environment } from 'src/environments/environment';
 
 export class BaseUrlHttpInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const baseUrl = environment && environment.baseUrl;
+        const apiUrl = environment && environment.apiUrl;
 
         if (req.url.startsWith('./')) {
-            req = req.clone({ url: baseUrl + req.url.slice(2) });
+            req = req.clone({ url: apiUrl + req.url.slice(2) });
         }
 
         console.log(`BaseUrlHttpInterceptor: Using URL: ${req.url}`);

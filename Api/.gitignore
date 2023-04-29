@@ -38,3 +38,10 @@ msbuild.wrn
 
 # Demo Sqlite files
 DemoDbs/
+
+# App Configs
+appsettings*.json
+
+# Publish Profiles
+*.pubxml
+
