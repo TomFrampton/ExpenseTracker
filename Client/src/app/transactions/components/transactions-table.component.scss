@@ -1,5 +1,9 @@
+.mat-cell {
+    white-space: nowrap;
+}
+
 .mat-column-selected {
-    width: 96px;
+    //width: 96px;
 }
 
 mat-paginator {
@@ -8,7 +12,7 @@ mat-paginator {
 
 .mat-column-creditAmount,
 .mat-column-debitAmount {
-    width: 150px;
+    //width: 150px;
     text-align: right;
 }
 
