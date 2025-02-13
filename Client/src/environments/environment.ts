@@ -10,8 +10,8 @@ export interface Environment {
 
 export const environment: Environment = {
     production: false,
-    isDemo: true,
-    apiUrl: 'https://localhost:44358/',
+    isDemo: false,
+    apiUrl: 'http://local.augustus.com/api/',
 };
 
 /*

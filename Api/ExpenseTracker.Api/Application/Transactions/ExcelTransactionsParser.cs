@@ -14,7 +14,7 @@ namespace ExpenseTracker.Api.Application.Transactions
         /// <summary>
         /// 1-index of the last column to read on the uploaded spreadsheets.
         /// </summary>
-        private const int _lastUploadedColumn = 8;
+        private const int _lastUploadedColumn = 9;
 
         /// <summary>
         /// 1-index of the last column to read on the demo spreadsheet.
@@ -55,8 +55,9 @@ namespace ExpenseTracker.Api.Application.Transactions
                 {
                     TransactionDate = Convert.ToDateTime(row[0]),
                     TransactionDescription = Convert.ToString(row[5]),
-                    DebitAmount = ConvertAmount(row[6]),
-                    CreditAmount = ConvertAmount(row[7]),
+                    DebitAmount = ConvertDecimal(row[6]),
+                    CreditAmount = ConvertDecimal(row[7]),
+                    Balance = ConvertDecimal(row[8]),
                     OrderId = i + 1
                 });
             }
@@ -102,10 +103,10 @@ namespace ExpenseTracker.Api.Application.Transactions
                     TransactionDate = Convert.ToDateTime(row[0]),
                     TransactionDescription = Convert.ToString(row[1]),
                     UserSuppliedDescription = Convert.ToString(row[2]),
-                    DebitAmount = ConvertAmount(row[3]),
-                    CreditAmount = ConvertAmount(row[4]),
-                    CategoryId = ConvertCategoryId(row[5]),
-                    SubCategoryId = ConvertCategoryId(row[6]),
+                    DebitAmount = ConvertDecimal(row[3]),
+                    CreditAmount = ConvertDecimal(row[4]),
+                    CategoryId = ConvertInt(row[5]),
+                    SubCategoryId = ConvertInt(row[6]),
                     OrderId = i + 1
                 });
             }
@@ -113,13 +114,13 @@ namespace ExpenseTracker.Api.Application.Transactions
             return transactions;
         }
 
-        private decimal? ConvertAmount(object amount)
+        private decimal? ConvertDecimal(object amount)
         {
             var value = Convert.ToDecimal(amount);
-            return value == 0M ? null : value;
+            return value == 0M ? null : Math.Round(value, 2);
         }
 
-        private int? ConvertCategoryId(object amount)
+        private int? ConvertInt(object amount)
         {
             var value = Convert.ToInt32(amount);
             return value == 0 ? null : value;

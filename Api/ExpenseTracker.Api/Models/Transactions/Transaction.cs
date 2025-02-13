@@ -12,6 +12,7 @@ namespace ExpenseTracker.Api.Models.Transactions
         public string Description { get; set; }
         public decimal? CreditAmount { get; set; }
         public decimal? DebitAmount { get; set; }
+        public decimal? Balance { get; set; }
 
         public int? CategoryId { get; set; }
         public int? SubCategoryId { get; set; }

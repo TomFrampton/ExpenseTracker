@@ -197,14 +197,16 @@ namespace ExpenseTracker.Api.Services
                     Date = excel.TransactionDate,
                     Description = excel.TransactionDescription,
                     CreditAmount = excel.CreditAmount,
-                    DebitAmount = excel.DebitAmount
+                    DebitAmount = excel.DebitAmount,
+                    Balance = excel.Balance
                 },
                 entity => new
                 {
                     Date = entity.Date,
                     Description = entity.Description,
                     CreditAmount = entity.CreditAmount,
-                    DebitAmount = entity.DebitAmount
+                    DebitAmount = entity.DebitAmount,
+                    Balance = entity.Balance
                 },
                 (excel, entity) => new { excel, entity }
             )
@@ -228,7 +230,8 @@ namespace ExpenseTracker.Api.Services
                     Date = pair.Excel.TransactionDate,
                     Description = pair.Excel.TransactionDescription,
                     CreditAmount = pair.Excel.CreditAmount,
-                    DebitAmount = pair.Excel.DebitAmount
+                    DebitAmount = pair.Excel.DebitAmount,
+                    Balance = pair.Excel.Balance
                 })
                 .ToList();
 

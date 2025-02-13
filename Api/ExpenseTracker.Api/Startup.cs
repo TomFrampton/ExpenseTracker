@@ -131,7 +131,7 @@ namespace ExpenseTracker.Api
                 {
                     var context = serviceScope.ServiceProvider.GetRequiredService<ExpenseTrackerContext>();
                     //context.Database.Migrate();
-                    context.Database.EnsureCreated();
+                    //context.Database.EnsureCreated();
                 }
             }
         }
