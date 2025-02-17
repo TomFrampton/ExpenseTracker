@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SortDirection } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
-import { tap, map, switchMap, shareReplay } from 'rxjs/operators';
+import { tap, map, switchMap, shareReplay, takeUntil } from 'rxjs/operators';
 
 import { Id } from '@app/common/id';
 import { PaginationSettings, PaginationSummary } from '@app/common/pagination';
+import { getFromLocalStorage, saveToLocalStorage } from '@app/common/utils';
 
 import { TransactionService } from '../services';
 import { TransactionTableRow } from '../components';
@@ -22,14 +23,25 @@ export interface TransactionQueryParams {
     year?: number;
 }
 
+const DEFAULT_QUERY: TransactionQueryParams = {
+    pageSize: 5,
+    pageNumber: 1,
+    searchTerm: null,
+    dateSortDirection: null,
+    type: TransactionType.all.code
+};
+
+const TRANSACTION_QUERY_KEY = 'TRANSACTION_QUERY';
+
 @Component({
     templateUrl: './transactions-list-page.component.html',
     styleUrls: ['./transactions-list-page.component.scss']
 })
-export class TransactionsListPageComponent implements OnInit {
+export class TransactionsListPageComponent implements OnInit, OnDestroy {
+    private readonly destroy$ = new Subject<void>();
+
     private readonly refreshTransactions$ = new Subject<void>();
-    private readonly queryChange$ = new BehaviorSubject<TransactionQueryParams>({
-        pageSize: 5, pageNumber: 1, searchTerm: null, dateSortDirection: null, type: TransactionType.all.code });
+    private readonly queryChange$ = new BehaviorSubject<TransactionQueryParams>(this.getSavedQueryParams() || DEFAULT_QUERY);
 
     transactionRows$: Observable<TransactionTableRow[]>;
     transactionCategories$: Observable<TransactionCategory[]>;
@@ -122,6 +134,15 @@ export class TransactionsListPageComponent implements OnInit {
             }),
             tap(() => this.transactionYearsLoading = false)
         );
+
+        this.queryChange$.pipe(takeUntil(this.destroy$)).subscribe(value => {
+            this.saveQueryParams(value);
+        });
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     onTransactionSelectionChange(ids: Id<Transaction>[]) {
@@ -192,5 +213,13 @@ export class TransactionsListPageComponent implements OnInit {
             userSuppliedDescription: t.userSuppliedDescription,
             isCategorised: t.isCategorised
         }))
+    }
+
+    private saveQueryParams(params: TransactionQueryParams) {
+        saveToLocalStorage(TRANSACTION_QUERY_KEY, params);
+    }
+
+    private getSavedQueryParams(): TransactionQueryParams {
+        return getFromLocalStorage(TRANSACTION_QUERY_KEY);
     }
 }
